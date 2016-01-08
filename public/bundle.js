@@ -24120,6 +24120,7 @@
 	var Main = __webpack_require__(209);
 	var Home = __webpack_require__(210);
 	var Login = __webpack_require__(211);
+	var Signup = __webpack_require__(317);
 	var Router = __webpack_require__(159);
 	var Route = Router.Route;
 	var IndexRoute = Router.IndexRoute;
@@ -24131,7 +24132,8 @@
 	  { path: '/', component: Main },
 	  React.createElement(Route, { name: 'login', path: 'login', component: Login }),
 	  React.createElement(Route, { name: 'home', path: 'home', component: Home }),
-	  React.createElement(Route, { name: 'map', path: 'map', component: MapApp })
+	  React.createElement(Route, { name: 'map', path: 'map', component: MapApp }),
+	  React.createElement(Route, { name: 'signup', path: 'signup', component: Signup })
 	);
 
 /***/ },
@@ -24165,6 +24167,12 @@
 	            "a",
 	            { href: "#login" },
 	            "Login"
+	          ),
+	          "  ",
+	          React.createElement(
+	            "a",
+	            { href: "#signup" },
+	            "Sign Up"
 	          )
 	        )
 	      ),
@@ -37432,6 +37440,70 @@
 	    return zh_tw;
 
 	}));
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(1);
+
+	var Signup = React.createClass({
+	  displayName: "Signup",
+
+	  render: function render() {
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "h2",
+	        null,
+	        "Sign up"
+	      ),
+	      React.createElement(
+	        "form",
+	        { action: "/signup", method: "post" },
+	        React.createElement(
+	          "div",
+	          null,
+	          React.createElement(
+	            "label",
+	            { htmlFor: "username" },
+	            "Username:"
+	          ),
+	          React.createElement("input", { id: "username", type: "text", name: "username" })
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          React.createElement(
+	            "label",
+	            { htmlFor: "password" },
+	            "Password:"
+	          ),
+	          React.createElement("input", { id: "password", type: "password", name: "password" })
+	        ),
+	        React.createElement(
+	          "div",
+	          null,
+	          React.createElement("input", { type: "submit", value: "Sign up" })
+	        )
+	      ),
+	      React.createElement(
+	        "p",
+	        null,
+	        React.createElement(
+	          "a",
+	          { href: "/login" },
+	          "Login to your account →"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports = Signup;
 
 /***/ }
 /******/ ]);

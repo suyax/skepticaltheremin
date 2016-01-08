@@ -6,7 +6,7 @@ var Main = React.createClass({
       <div className="main-container">
         <nav className="navbar navbar-default" role="navigation">
           <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>
-            <a href="#map">Maps</a>   <a href="#login">Login</a>
+            <a href="#map">Maps</a>   <a href="#login">Login</a>  <a href="#signup">Sign Up</a>
           </div>
         </nav>
         <div className="container">
