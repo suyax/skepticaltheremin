@@ -153,13 +153,9 @@ var MapApp = React.createClass({
     return (
 
       <div>
-<<<<<<< HEAD
         <h1>Breadcrumbs</h1>
-=======
         <SearchUser url="/users"/>
         <h1>Your Google Maps Locations</h1>
->>>>>>> Added SearchUser functionality
-
         <Search onSearch={this.searchForAddress} />
 
         <Map lat={this.state.mapCoordinates.lat}
