@@ -57,6 +57,25 @@ var MapApp = React.createClass({
     localStorage.favorites = JSON.stringify(favorites);
   },
 
+  addToFavBreadCrumbs(lat, lng, timestamp, details, infoWindow) {
+
+    var favorites = this.state.favorites;
+
+    favorites.push({
+      lat: lat,
+      lng: lng,
+      timestamp: timestamp,
+      details: details,
+      infoWindow: infoWindow
+    });
+
+    this.setState({
+      favorites: favorites
+    });
+
+    localStorage.favorites = JSON.stringify(favorites);
+  },
+
   removeFromFavorites(address){
 
     var favorites = this.state.favorites;
