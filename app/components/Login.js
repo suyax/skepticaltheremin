@@ -23,17 +23,21 @@ var Login = React.createClass({
 
       <div>
       <h2>Login</h2>
-      <form action="/login" method="post">
-        <div>
-          <label htmlFor="username">Username: </label>
-          <input id="username" type="text" name="username" />
+      <form action="/login" method="post" role="form">
+        <div className="form-group">
+          <label htmlFor="username" className="col-sm-2">Username: </label>
+          <div className="col-sm-10">
+            <input id="username" type="text" name="username" className="form-control" />
+          </div>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password" className="col-sm-2">Password: </label>
+          <div className="col-sm-10" >
+          <input id="password" type="password" name="password" className="form-control" />
+          </div>
         </div>
         <div>
-          <label htmlFor="password">Password: </label>
-          <input id="password" type="password" name="password" />
-        </div>
-        <div>
-          <input type="submit" value="Login" />
+          <input type="submit" className="btn btn-primary" value="Login" />
         </div>
       </form>
       <p>
