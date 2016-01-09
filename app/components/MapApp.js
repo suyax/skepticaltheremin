@@ -22,10 +22,10 @@ var MapApp = React.createClass({
 
     return {
       favorites: favorites,
-      currentAddress: 'Paris, France',
+      currentAddress: 'Hack Reactor',
       mapCoordinates: {
-        lat: 48.856614,
-        lng: 2.3522219
+        lat: 37.7836966,
+        lng: -122.4089664
       }
     };
   },
@@ -48,6 +48,25 @@ var MapApp = React.createClass({
     favorites.push({
       address: address,
       timestamp: Date.now()
+    });
+
+    this.setState({
+      favorites: favorites
+    });
+
+    localStorage.favorites = JSON.stringify(favorites);
+  },
+
+  addToFavBreadCrumbs(lat, lng, timestamp, details, infoWindow) {
+
+    var favorites = this.state.favorites;
+
+    favorites.push({
+      lat: lat,
+      lng: lng,
+      timestamp: timestamp,
+      details: details,
+      infoWindow: infoWindow
     });
 
     this.setState({
@@ -134,15 +153,19 @@ var MapApp = React.createClass({
     return (
 
       <div>
-        <h1>Your Google Maps Locations</h1>
+        <h1>Breadcrumbs</h1>
 
         <Search onSearch={this.searchForAddress} />
 
-        <Map lat={this.state.mapCoordinates.lat} lng={this.state.mapCoordinates.lng} />
+        <Map lat={this.state.mapCoordinates.lat}
+          lng={this.state.mapCoordinates.lng}
+          favorites={this.state.favorites}
+          onFavoriteToggle={this.toggleFavorite}
+          onAddToFavBcs={this.addToFavBreadCrumbs} />
 
         <CurrentLocation address={this.state.currentAddress} 
           favorite={this.isAddressInFavorites(this.state.currentAddress)} 
-          onFavoriteToggle={this.toggleFavorite} />
+          onFavoriteToggle={this.toggleFavorite} /> 
 
         <LocationList locations={this.state.favorites} activeLocationAddress={this.state.currentAddress} 
           onClick={this.searchForAddress} />
