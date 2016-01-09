@@ -2,7 +2,11 @@ var mongoose = require('mongoose');
 var User = require('../models/user.js');
 
 // Given the name of a user, retrieve their record from the database
-exports.getUserByName = function (name, callback) {
+exports.createUser = function (name, callback) {
+
+}
+
+exports.findOne = function (name, callback) {
   User.findOne(name, function (err, person) {
     if (err) {
       callback(err);
@@ -13,18 +17,19 @@ exports.getUserByName = function (name, callback) {
 };
 
 // Given the name of a user, update their `email` property
-exports.updateEmailByName = function (name, newEmail, callback) {
+exports.updatePins = function (name, newPin, callback) {
 
-  User.findOne({ name: name }, function (err, doc) {
+  User.findOne(name, function (err, doc) {
+    console.log('updating database')
     if (err) {
       callback(err);
       return;
     }
 
-    doc.email = newEmail;
+    doc.pins.push(newPin);
     doc.save();
-    callback(null, doc);
-    
+    callback(null, doc.pin);
+  
   });
 
 };
