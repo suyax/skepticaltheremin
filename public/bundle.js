@@ -24469,6 +24469,12 @@
 
 	var Map = React.createClass({
 	  displayName: 'Map',
+	  toggleFavorite: function toggleFavorite(address) {
+	    this.props.onFavoriteToggle(address);
+	  },
+	  addFavBreadCrumb: function addFavBreadCrumb(lat, lng, timestamp, details, infoWindow) {
+	    this.props.onAddToFavBcs(lat, lng, timestamp, details, infoWindow);
+	  },
 	  componentDidMount: function componentDidMount() {
 
 	    // Only componentDidMount is called when the component is first added to
@@ -24488,6 +24494,8 @@
 
 	      return;
 	    }
+
+	    var bindContext = this;
 
 	    this.lastLat = this.props.lat;
 	    this.lastLng = this.props.lng;

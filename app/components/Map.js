@@ -2,6 +2,14 @@ var React = require('react');
 
 var Map = React.createClass({
 
+  toggleFavorite(address){
+    this.props.onFavoriteToggle(address);
+  },
+
+  addFavBreadCrumb(lat, lng, timestamp, details, infoWindow) {
+    this.props.onAddToFavBcs(lat, lng, timestamp, details, infoWindow);
+  },
+
   componentDidMount(){
 
     // Only componentDidMount is called when the component is first added to
@@ -22,6 +30,8 @@ var Map = React.createClass({
 
       return;
     }
+
+    var bindContext = this;
 
     this.lastLat = this.props.lat;
     this.lastLng = this.props.lng
