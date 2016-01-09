@@ -27,6 +27,16 @@ app.get("/", function (req, res) {
   res.send(__dirname + "..public/index.html");
 });
 
+app.get('/signup', function(req, res){
+  console.log('signup');
+  res.redirect('/#map')
+});
+
+app.post('/login', function(req, res){
+  console.log('signup');
+  res.redirect('/#map')
+})
+
 //api get
 // app.get('/maps/:username', function (req, res) {
 //   console.log('user get')
