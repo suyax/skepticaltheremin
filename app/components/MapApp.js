@@ -22,10 +22,10 @@ var MapApp = React.createClass({
 
     return {
       favorites: favorites,
-      currentAddress: 'Paris, France',
+      currentAddress: 'Hack Reactor',
       mapCoordinates: {
-        lat: 48.856614,
-        lng: 2.3522219
+        lat: 37.7836966,
+        lng: -122.4089664
       }
     };
   },
