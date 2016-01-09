@@ -10,6 +10,7 @@
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "history": "^1.17.0",
+    "moment": "^2.11.0",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "react-router": "^1.0.3",
@@ -23,7 +24,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --inline --hot --content-base public/"
   },
-
   "author": "",
   "license": "ISC"
 }
