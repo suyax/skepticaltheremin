@@ -4,7 +4,7 @@ var Search = require('./Search');
 var Map = require('./Map');
 var CurrentLocation = require('./CurrentLocation');
 var LocationList = require('./LocationList');
-
+var SearchUser = require('./SearchUser');
 
 var MapApp = React.createClass({
 
@@ -154,7 +154,8 @@ var MapApp = React.createClass({
 
       <div>
         <h1>Breadcrumbs</h1>
-
+        <SearchUser url="/users"/>
+        <h1>Your Google Maps Locations</h1>
         <Search onSearch={this.searchForAddress} />
 
         <Map lat={this.state.mapCoordinates.lat}

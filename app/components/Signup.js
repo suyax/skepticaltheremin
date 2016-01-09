@@ -15,7 +15,7 @@ var Signup = React.createClass({
              <input id="password" type="password" name="password" />
            </div>
            <div>
-             <input type="submit" value="Sign up" />
+             <input className="btn btn-primary" type="submit" value="Sign up" />
            </div>
        </form>
        <p>

@@ -73,9 +73,11 @@ var Map = React.createClass({
   render(){
 
     return (
+      <div>
       <div className="map-holder">
         <p>Loading......</p>
         <div id="map"></div>
+      </div>
       </div>
     );
   }
