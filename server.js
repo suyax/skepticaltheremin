@@ -62,7 +62,6 @@ app.get('/maps/:username', function (req, res) {
 
 });
 
-
 app.put('/maps/:username', function (req, res) {
 
   console.log('users put')
@@ -78,21 +77,26 @@ app.put('/maps/:username', function (req, res) {
     }
     console.log(pins)
     res.json(pins);
-    
+
   });
 
-  // userController.createUser({
-  //   query:{userName: username},
-  //   update:{$push: {pins: {pin} } },
-  //   new: true,
-  //   upsert : true
-  //   }
-  //   , function(err, person){
-  //    if (err) {
-  //     return res.json({err: err})
-  //   }
-  //   res.json(person)
-  // })
+
+// app.delete('/maps/:username', function (req, res) {
+
+//   console.log('users put')
+//   console.log('req params', req.params)
+//   var username = req.params.username;
+//   // var newpin = req.body
+
+//   userController.removeLastPin(username, function(err, pins){
+//      if (err) {
+//       return res.json({err: err});
+//     }
+//     console.log(pins)
+//     res.json(pins);
+//   });
+  
+// });
 
 
 });
