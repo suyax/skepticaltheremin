@@ -1,13 +1,15 @@
 var mongoose = require('mongoose');
 
-var pinSchema = mongoose.schema({
-  note: String,
+var pinSchema = new mongoose.Schema({
+  address: String,
   lat: Number,
   lng: Number,
-  timestamp Number
+  details: {},
+  timestamp: Date
 });
 
-var Pin = mongoose.model('Pin', userSchema);
+var Pin = mongoose.model('Pin', pinSchema);
 
-module.exports.pin = Pin;
-module.exports.schema = pinSchema;
+module.exports = Pin;
+
+

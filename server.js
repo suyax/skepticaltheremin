@@ -5,8 +5,9 @@ var bodyParser = require('body-parser');
 var path = require('path');
 
 // var router = require('./routers/router.js')
-// var userController = require('./controllers/userController.js');
-// var classController = require('./controllers/classController.js');
+
+var userController = require('./controllers/userControllers.js');
+
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -26,30 +27,31 @@ app.get("/", function (req, res) {
   res.send(__dirname + "..public/index.html");
 });
 
-//
-  // app.get('/users/:username', function (req, res) {
-  //   console.log('user get')
+//api get
+// app.get('/maps/:username', function (req, res) {
+//   console.log('user get')
+//   // userController.findOne( {username: req.params.username} , function(err, person){
+//   //   if (err) {
+//   //     return res.json({err: err})
+//   //   }
+//   //   res.json(person)
+//   // });
+// res.json([{name: 'mark'}])
 
-  //   userController.findOne( {username: req.params.username} , function(err, person){
-  //     if (err) {
-  //       return res.json({err: err})
-  //     }
-  //     res.json(person)
-  //   });
+// });
 
-  // });
 
-  // app.get('/users', function (req, res) {
-  //   console.log('user get')
+// app.get('/maps', function (req, res) {
+//   console.log('user get')
 
-  //   userController.findAll({}, function(err, person){
-  //     if (err) {
-  //       return res.json({err: err})
-  //     }
-  //     res.json(person)
-  //   });
+//   userController.findAll({}, function(err, person){
+//     if (err) {
+//       return res.json({err: err})
+//     }
+//     res.json(person)
+//   });
 
-  // });
+// });
 
   // app.put('/users/:username', function (req, res) {
 
