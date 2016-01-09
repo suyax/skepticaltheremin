@@ -65,6 +65,9 @@ var Map = React.createClass({
       lng: this.props.lng
       // icon: '/'
     });
+
+    map.addMarkers(this.props.favorites);
+
   },
 
   render(){
