@@ -86,30 +86,31 @@ router.route('/maps/:username')
     });
   });
 
-//delete last pin from array
-// router.route('/maps/:username')
-//   .delete(function (req, res) {
-//     var username = req.params.username;
-//     userController.removeLastPin({userName: username}, function(err, pins){
-//        if (err) {
-//         return res.json({err: err});
-//       }
-//       res.json(pins);
-//     });
-//   });
-//need to refactor to delete specific pin
-  router.route('/maps/:username')
+// delete last pin from array
+router.route('/maps/:username')
   .delete(function (req, res) {
-
     var username = req.params.username;
-    // var pinId = "5692934152a5369a1a9f6fa8"
-    var pinId = req.body;
-    userController.removePin({userName: username}, pinId, function(err, doc){
+    userController.removeLastPin({userName: username}, function(err, pins){
        if (err) {
         return res.json({err: err});
       }
-      res.json(doc);
+      res.json(pins);
     });
   });
+
+//need to refactor to delete specific pin. current controller not working
+  // router.route('/maps/:username')
+  // .delete(function (req, res) {
+
+  //   var username = req.params.username;
+  //   // var pinId = "5692934152a5369a1a9f6fa8"
+  //   var pinId = req.body;
+  //   userController.removePin({userName: username}, pinId, function(err, doc){
+  //      if (err) {
+  //       return res.json({err: err});
+  //     }
+  //     res.json(doc);
+  //   });
+  // });
 
 module.exports = router;

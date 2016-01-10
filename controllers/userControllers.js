@@ -67,18 +67,16 @@ exports.updatePins = function (query, newPin, callback) {
 //remove specific pin pin and refactor from remove last -- sitll nto working
 exports.removePin = function (query, pinId, callback) {
 
-  console.log('pinid', pinId)
-  User.update(query, {$pull: {pins: {_id: pinId._id}}}, {multi: true}, function (err, doc) {
-    console.log('remove from database')
-    if (err) {
-      callback(err);
-      return;
-    }
-    console.log(doc)
-    
-    callback(null, doc);
-  
-  });
+  // console.log('pinid', pinId)
+  // User.update(query, {$pull: {pins: {_id: pinId._id}}}, {multi: true}, function (err, doc) {
+  //   console.log('remove from database')
+  //   if (err) {
+  //     callback(err);
+  //     return;
+  //   }
+  //   console.log(doc)
+  //   callback(null, doc);
+  // });
 
 };
 
