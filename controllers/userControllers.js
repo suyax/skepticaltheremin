@@ -2,7 +2,10 @@ var mongoose = require('mongoose');
 var User = require('../models/user.js');
 var Pin = require('../models/pin.js');
 
+//////////////////
 //users controllers
+//////////////////
+
 exports.addUser = function(name, callback) {
   User.create(name, function (err, person) {
     if (err) {
@@ -23,7 +26,9 @@ exports.removeUser = function(name, callback) {
   });
 }
 
+//////////////////
 //pins controllers
+//////////////////
 exports.findOne = function (name, callback) {
   User.findOne(name, function (err, person) {
     if (err) {

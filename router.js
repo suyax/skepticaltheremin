@@ -8,6 +8,10 @@ var router = express.Router();
 
 var userController = require('./controllers/userControllers.js');
 
+//////////////////
+//users 
+//////////////////
+
 //get all users. not usually useful
 router.route('/users')
   .get(function (req, res) {
@@ -49,6 +53,9 @@ router.route('/users')
     });
   });
 
+//////////////////
+//pins
+//////////////////
 
 //get array of pins for single user
 router.route('/maps/:username')
