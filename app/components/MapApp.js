@@ -57,16 +57,19 @@ var MapApp = React.createClass({
     localStorage.favorites = JSON.stringify(favorites);
   },
 
-  addToFavBreadCrumbs(lat, lng, timestamp, details, infoWindow) {
-
+  addToFavBreadCrumbs(id, lat, lng, timestamp, details, infoWindow, location) {
+    console.log(arguments);
     var favorites = this.state.favorites;
 
     favorites.push({
+      id: id,
       lat: lat,
       lng: lng,
       timestamp: timestamp,
       details: details,
-      infoWindow: infoWindow
+      infoWindow: infoWindow,
+      address: this.state.currentAddress,
+      location: location
     });
 
     this.setState({
@@ -120,8 +123,7 @@ var MapApp = React.createClass({
     return false;
   },
 
-  searchForAddress(address){
-    
+  searchForAddress(address, cb){
     var self = this;
 
     // We will use GMaps' geocode functionality,
@@ -143,6 +145,8 @@ var MapApp = React.createClass({
           }
         });
 
+        cb(results[0].formatted_address);
+
       }
     });
 
@@ -155,18 +159,16 @@ var MapApp = React.createClass({
       <div>
         <h1>Breadcrumbs</h1>
         <SearchUser url="/users"/>
-        <h1>Your Google Maps Locations</h1>
+        <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
         <Search onSearch={this.searchForAddress} />
 
         <Map lat={this.state.mapCoordinates.lat}
           lng={this.state.mapCoordinates.lng}
           favorites={this.state.favorites}
           onFavoriteToggle={this.toggleFavorite}
-          onAddToFavBcs={this.addToFavBreadCrumbs} />
-
-        <CurrentLocation address={this.state.currentAddress} 
-          favorite={this.isAddressInFavorites(this.state.currentAddress)} 
-          onFavoriteToggle={this.toggleFavorite} /> 
+          onAddToFavBcs={this.addToFavBreadCrumbs}
+          searchAddress={this.searchForAddress}
+          address={this.state.currentAddress} />
 
         <LocationList locations={this.state.favorites} activeLocationAddress={this.state.currentAddress} 
           onClick={this.searchForAddress} />
