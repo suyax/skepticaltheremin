@@ -11,9 +11,11 @@ var Map = React.createClass({
       lastMarkerTimeStamp: null
     }
   },
+  
   handleLocationChange(e) {
     this.setState({location: e.target.value});  
   },
+  
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
