@@ -7,7 +7,8 @@ var Pin =  require('./pin.js')
 var userSchema = new mongoose.Schema({
   username: { type: String, index: { unique: true } },
   password: String,
-  pins: Array //[{type: Schema.Type.ObjectId, ref: 'Pin'}]
+  pins: Array
+  //[{type: Schema.Type.ObjectId, ref: 'Pin'}]
 
 });
 
