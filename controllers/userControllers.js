@@ -103,6 +103,20 @@ exports.removeLastPin = function (name, callback) {
 //
 
 //get all people --for testing mostly
+
+exports.deletePin = function (name, pinId) {
+  User.findOne({name: name}, function (err, user) {
+    var doc = user.pins.id(pinId).remove();
+    doc.save(function (err) {
+      if (err) {
+        console.log('could not delete pin: ' + err);
+      }
+
+    })
+
+  });
+};
+
 exports.getAll = function (callback) {
   User.find({}, function (err, persons) {
     if (err) {
