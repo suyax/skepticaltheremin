@@ -32,7 +32,9 @@ app.post('/login', function(req, res){
   res.redirect('/#map')
 })
 
-//All other routing goes through api url
+
+//api routing
+
 app.use('/api', router);
 
 

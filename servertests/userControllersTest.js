@@ -2,6 +2,7 @@ var expect = require('chai').expect;
 var mongoose = require('mongoose');
 var User = require('../models/user.js');
 var Pin = require('../models/pin.js');
+
 var UserController = require('../controllers/userControllers.js');
 
 var dbURI = 'mongodb://localhost/mapstest';
