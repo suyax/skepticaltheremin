@@ -72,11 +72,13 @@ router.route('/maps/:username')
 //insert new pin in pins array on user obj
 router.route('/maps/:username')
   .put(function (req, res) {
-    var username = req.params.userName;
-    // var newpin = req.body;
-    var newpin = {"lat":37.78650430839168,"lng":-122.40644931793213,"timestamp":1452391678701,"details":{"note":"I meh this place."},"infoWindow":{"content":"<p>llllalala</p>"}}
+    var username = req.params.username;
+    var newpin = req.body;
 
-    userController.updatePins(username, newpin, function(err, pins){
+    console.log('put username', username)
+    console.log('newpint', newpin);
+
+    userController.updatePins({userName: username}, newpin, function(err, pins){
        if (err) {
         return res.json({err: err});
       }
