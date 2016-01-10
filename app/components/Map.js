@@ -7,7 +7,8 @@ var Map = React.createClass({
       lat: this.props.lat,
       lng: this.props.lng,
       previousMarker: null,
-      currentMarker: null
+      currentMarker: null,
+      lastMarkerTimeStamp: null
     }
   },
   handleLocationChange(e) {
@@ -17,12 +18,26 @@ var Map = React.createClass({
     this.setState({comment: e.target.value});
   },
 
+  matchBreadCrumb(timestamp){
+    var breadcrumbs = this.props.favorites;
+    for(var i = breadcrumbs.length - 1; i >= 0; i--){
+      var breadcrumb = breadcrumbs[i];
+      if(breadcrumb.timestamp === timestamp){
+        console.log("Breadcrumb found!");
+        console.log(breadcrumb.location);
+        this.setState({location: breadcrumb.location, comment: breadcrumb.details.note})
+        return;
+      }
+    }
+
+  },
+
   toggleFavorite(address){
     this.props.onFavoriteToggle(address);
   },
 
   addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location) {
-    console.log(location);
+    console.log(timestamp);
     this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location);
   },
 
@@ -70,14 +85,18 @@ var Map = React.createClass({
             self.setState({location: newLocation});
           });
           var id = self.props.favorites.length;
-          this.addMarker({
+          var time = Date.now();
+          console.log(time);
+          self.setState({lastMarkerTimeStamp: time});
+          var marker = this.addMarker({
             lat: e.latLng.lat(),
             lng: e.latLng.lng(),
             title: 'New marker',
             id: id,
+            timestamp: time,
             icon: {
               path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-              strokeColor: "red",
+              strokeColor: "green",
               scale: 5
             },
             // infoWindow: {
@@ -85,11 +104,15 @@ var Map = React.createClass({
             // },
             click: function(e) {
               console.log(e.id);
+              console.log(e.timestamp);
               self.setState({currentMarker: this});
               self.updateCurrentLocation();
+              self.matchBreadCrumb(e.timestamp);
               // this.setMap(null);
             }
           });
+          self.setState({currentMarker: marker});
+          self.updateCurrentLocation();
           // self.addFavBreadCrumb(id, e.latLng.lat(), e.latLng.lng(), Date.now(), {note: "I LOVE this place."}, {content: '<p>Dat info dohhh</p>'});
         }
       }, {
@@ -108,6 +131,7 @@ var Map = React.createClass({
         lng: favorite.lng,
         title: 'New marker',
         id: index,
+        timestamp: favorite.timestamp,
         icon: {
           path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
           strokeColor: "red",
@@ -116,8 +140,10 @@ var Map = React.createClass({
         click: function(e) {
           // console.log(e);
           console.log(e.id);
+          console.log(e.timestamp);
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
+          self.matchBreadCrumb(e.timestamp);
           // self.state.currentMarker.setMap(null);
         }
       });
@@ -215,8 +241,11 @@ var Map = React.createClass({
     e.preventDefault();
     console.log("submitted");
     var id = this.props.favorites.length;
-    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, Date.now(), {note: this.state.comment}, {content: '<p>Dat info dohhh</p>'}, this.state.location);
+    var timestamp = this.state.lastMarkerTimeStamp;
+    console.log(timestamp);
+    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
     // this.state.currentMarker.setMap(null);
+    this.setState({location: '', comment: ''});
   },
 
   render(){
