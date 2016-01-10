@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 
 // var router = express.Router();
-var router = require('./router.js')
+var router = require('./router/router.js')
 
 var userController = require('./controllers/userControllers.js');
 

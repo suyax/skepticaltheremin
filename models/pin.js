@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 
 var pinSchema = new mongoose.Schema({
-  _creator: {type: String, ref: "User"  },
+  // _creator: {type: String, ref: "User"  },
+  id: Number,
   address: String,
   lat: Number,
   lng: Number,

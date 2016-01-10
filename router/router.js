@@ -2,11 +2,10 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
-var path = require('path');
+// var path = require('path');
 
 var router = express.Router();
-
-var userController = require('./controllers/userControllers.js');
+var userController = require('../controllers/userControllers.js');
 
 //////////////////
 //users 
@@ -16,7 +15,7 @@ var userController = require('./controllers/userControllers.js');
 router.route('/users')
   .get(function (req, res) {
     console.log('user get')
-    userController.readAllUsers(function(err, person){
+    userController.getAll(function(err, person){
       if (err) {
         return res.json({err: err})
       }
@@ -62,7 +61,7 @@ router.route('/maps/:username')
   .get(function (req, res) {
     var username = req.params.username;
 
-    userController.findOne({username: username}, function(err, person){
+    userController.findOne({userName: username}, function(err, person){
       if (err) {
         return res.json({err: err})
       }
@@ -73,8 +72,10 @@ router.route('/maps/:username')
 //insert new pin in pins array on user obj
 router.route('/maps/:username')
   .put(function (req, res) {
-    var username = req.params.username;
-    var newpin = req.body;
+    var username = req.params.userName;
+    // var newpin = req.body;
+    var newpin = {"lat":37.78650430839168,"lng":-122.40644931793213,"timestamp":1452391678701,"details":{"note":"I meh this place."},"infoWindow":{"content":"<p>llllalala</p>"}}
+
     userController.updatePins(username, newpin, function(err, pins){
        if (err) {
         return res.json({err: err});
@@ -88,7 +89,7 @@ router.route('/maps/:username')
 router.route('/maps/:username')
   .delete(function (req, res) {
     var username = req.params.username;
-    userController.removeLastPin({username: username}, function(err, pins){
+    userController.removeLastPin({userName: username}, function(err, pins){
        if (err) {
         return res.json({err: err});
       }
