@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var path = require('path');
 
-// var router = require('./routers/router.js')
+var router = express.Router();
 
 var userController = require('./controllers/userControllers.js');
 
@@ -17,15 +17,16 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, "./public")));
     
-// app.use('/api', router);
+app.use('/api', router);
 
-app.get("/", function (req, res) {
-  console.log('home')
-  res.send(__dirname + "..public/index.html");
-});
+// app.get("/", function (req, res) {
+//   console.log('home')
+//   res.send(__dirname + "..public/index.html");
+// });
 
 //redirect to home at a hash url
 // need to add middleware for actual loging authentication
+
 app.get('/signup', function(req, res){
   console.log('signup');
 
@@ -64,42 +65,55 @@ app.get('/maps/:username', function (req, res) {
 
 app.put('/maps/:username', function (req, res) {
 
-  console.log('users put')
-  console.log('req params', req.params)
+  console.log('users put');
   var username = req.params.username;
-  // var newpin = req.body
-
-  var newpin = {address: 'my address', lat: 10, lng: 20};
+  var newpin = req.body;
 
   userController.updatePins(username, newpin, function(err, pins){
      if (err) {
       return res.json({err: err});
     }
-    console.log(pins)
+    console.log(pins);
     res.json(pins);
 
   });
-
-
-// app.delete('/maps/:username', function (req, res) {
-
-//   console.log('users put')
-//   console.log('req params', req.params)
-//   var username = req.params.username;
-//   // var newpin = req.body
-
-//   userController.removeLastPin(username, function(err, pins){
-//      if (err) {
-//       return res.json({err: err});
-//     }
-//     console.log(pins)
-//     res.json(pins);
-//   });
-  
-// });
-
-
 });
+
+
+app.put('/maps/:username', function (req, res) {
+
+  console.log('users put');
+  var username = req.params.username;
+  var newpin = req.body;
+
+  userController.updatePins(username, newpin, function(err, pins){
+     if (err) {
+      return res.json({err: err});
+    }
+    console.log(pins);
+    res.json(pins);
+
+  });
+});
+
+app.delete('/maps/:username', function (req, res) {
+
+  console.log('users put')
+  console.log('req params', req.params)
+  var username = req.params.username;
+  
+  userController.removeLastPin({username: username}, function(err, pins){
+     if (err) {
+      return res.json({err: err});
+    }
+    console.log(pins)
+    res.json(pins);
+  });
+  
+});
+
+
+
 
 
 
