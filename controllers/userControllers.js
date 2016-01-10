@@ -37,7 +37,7 @@ exports.findOne = function (name, callback) {
       callback(err);
       return;
     }
-    
+  //
     // var pins;
     // if (!person) {
     //   pins = [];
@@ -48,9 +48,8 @@ exports.findOne = function (name, callback) {
   });
 };
 
-//find user and add new pin to pins collection, one aat a time
+//find user and add new pin to pins collection, one at a time
 exports.updatePins = function (query, newPin, callback) {
-  
   if(!newPin){
     return;
   } else {
@@ -60,32 +59,28 @@ exports.updatePins = function (query, newPin, callback) {
         callback(err);
         return;
       }
-
-      console.log('doc:',doc)
       callback(null, pinToCreate);
-
     });
   }
 };
 
+//remove specific pin pin and refactor from remove last -- sitll nto working
+exports.removePin = function (query, pinId, callback) {
 
-//remove specific pin pin and refactor from remove last
-// exports.removePin = function (name, callback) {
-
-//   User.findOne(name, function (err, doc) {
-//     console.log('remove from database')
-//     if (err) {
-//       callback(err);
-//       return;
-//     }
-
-//     doc.pins.pop();
-//     doc.save();
-//     callback(null, doc.pins);
+  console.log('pinid', pinId)
+  User.update(query, {$pull: {pins: {_id: pinId._id}}}, {multi: true}, function (err, doc) {
+    console.log('remove from database')
+    if (err) {
+      callback(err);
+      return;
+    }
+    console.log(doc)
+    
+    callback(null, doc);
   
-//   });
+  });
 
-// };
+};
 
 //remove last pin
 exports.removeLastPin = function (name, callback) {
@@ -119,6 +114,9 @@ exports.getAll = function (callback) {
     callback(null, persons);
   });
 };
+
+//delete second item
+//5692934152a5369a1a9f6fa8
 
 //example pins
 // [{"lat":37.78696217255432,"lng":-122.40696430206299,"timestamp":1452391665585,"details":{"note":"I LOVE this place."},"infoWindow":{"content":"<p>Dat info dohhh</p>"}},
