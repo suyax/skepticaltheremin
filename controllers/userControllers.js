@@ -13,7 +13,6 @@ exports.findOne = function (name, callback) {
   });
 };
 
-
 // var newPin = {address: 'myaddress', lat: 1, lng: 3}
 exports.updatePins = function (name, newPin, callback) {
 
@@ -31,7 +30,7 @@ exports.updatePins = function (name, newPin, callback) {
     doc.save();
 
     console.log(doc.pins)
-    
+
     callback(null, doc.pins);
   
   });

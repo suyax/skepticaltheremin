@@ -10,14 +10,6 @@ var pinSchema = new mongoose.Schema({
 });
 
 
-// pinSchema.pre('save', true, function(next, done) {
-//   // calling next kicks off the next middleware in parallel
-  
-
-//   next();
-//   setTimeout(done, 100);
-// });
-
 var Pin = mongoose.model('Pin', pinSchema);
 
 module.exports = Pin;
