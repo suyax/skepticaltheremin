@@ -123,7 +123,7 @@ var MapApp = React.createClass({
     return false;
   },
 
-  searchForAddress(address){
+  searchForAddress(address, cb){
     var self = this;
 
     // We will use GMaps' geocode functionality,
@@ -144,6 +144,8 @@ var MapApp = React.createClass({
             lng: latlng.lng()
           }
         });
+
+        cb(results[0].formatted_address);
 
       }
     });

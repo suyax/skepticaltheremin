@@ -9,7 +9,7 @@ var Map = React.createClass({
     }
   },
   handleLocationChange(e) {
-    this.setState({location: e.target.value});
+    this.setState({location: e.target.value});  
   },
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
@@ -47,7 +47,9 @@ var Map = React.createClass({
         name: 'add_bread_crumb',
         action: function(e) {
           var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
-          self.props.searchAddress(addressString);
+          self.props.searchAddress(addressString, function(newLocation){
+            self.setState({location: newLocation});
+          });
           var id = self.props.favorites.length;
           this.addMarker({
             lat: e.latLng.lat(),
@@ -92,7 +94,7 @@ var Map = React.createClass({
   },
 
   componentDidUpdate(){
-    console.log("Update");
+    // this.setState({location: this.props.address});
     // map.addMarkers(this.props.favorites);
 
     // if(this.lastLat == this.props.lat && this.lastLng == this.props.lng){
@@ -194,7 +196,7 @@ var Map = React.createClass({
       </div>
       <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
         <label htmlFor="location">Location:</label>
-        <input type="text" className="form-control" id="location" value={this.props.address} placeholder="Location" />
+        <input type="text" className="form-control" id="location" onChange={this.handleLocationChange} value={this.state.location} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
         <textarea value={this.state.comment} onChange={this.handleCommentChange} className="form-control" rows="10" id="comment"></textarea>
         <div>
