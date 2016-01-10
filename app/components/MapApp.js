@@ -158,7 +158,7 @@ var MapApp = React.createClass({
 
       <div>
         <h1>Breadcrumbs</h1>
-        <SearchUser url="/users"/>
+        <SearchUser url="/api/users"/>
         <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
         <Search onSearch={this.searchForAddress} />
 
