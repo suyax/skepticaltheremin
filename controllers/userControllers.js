@@ -2,7 +2,28 @@ var mongoose = require('mongoose');
 var User = require('../models/user.js');
 var Pin = require('../models/pin.js');
 
+//users controllers
+exports.addUser = function(name, callback) {
+  User.create(name, function (err, person) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null, person);
+  });
+}
 
+exports.removeUser = function(name, callback) {
+  User.remove(name, function (err, person) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null, person);
+  });
+}
+
+//pins controllers
 exports.findOne = function (name, callback) {
   User.findOne(name, function (err, person) {
     if (err) {
@@ -17,7 +38,6 @@ exports.findOne = function (name, callback) {
 exports.updatePins = function (name, newPin, callback) {
 
   User.findOne(name, function (err, doc) {
-    console.log('updating database')
     if (err) {
       callback(err);
       return;
@@ -28,8 +48,6 @@ exports.updatePins = function (name, newPin, callback) {
 
     doc.pins.push(pinToCreate);
     doc.save();
-
-    console.log(doc.pins)
 
     callback(null, doc.pins);
   
