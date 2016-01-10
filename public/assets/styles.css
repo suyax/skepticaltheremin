@@ -113,3 +113,7 @@ a.list-group-item span.createdAt {
   color: #969FA8;
   z-index: -1;
 }
+
+textarea {
+  resize: vertical;
+}

@@ -1,13 +1,26 @@
 var React = require('react');
 
 var Map = React.createClass({
+  getInitialState(){
+    return {
+      location: '',
+      lat: this.props.lat,
+      lng: this.props.lng
+    }
+  },
+  handleLocationChange(e) {
+    this.setState({location: e.target.value});
+  },
+  handleCommentChange(e) {
+    this.setState({comment: e.target.value});
+  },
 
   toggleFavorite(address){
     this.props.onFavoriteToggle(address);
   },
 
-  addFavBreadCrumb(lat, lng, timestamp, details, infoWindow) {
-    this.props.onAddToFavBcs(lat, lng, timestamp, details, infoWindow);
+  addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location) {
+    this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location);
   },
 
   componentDidMount(){
@@ -16,57 +29,158 @@ var Map = React.createClass({
     // the page. This is why we are calling the following method manually. 
     // This makes sure that our map initialization code is run the first time.
 
-    this.componentDidUpdate();
-  },
-
-  componentDidUpdate(){
-    console.log("UPDate");
-
-    if(this.lastLat == this.props.lat && this.lastLng == this.props.lng){
-
-      // The map has already been initialized at this address.
-      // Return from this method so that we don't reinitialize it
-      // (and cause it to flicker).
-
-      return;
-    }
-
-    var bindContext = this;
-
-    this.lastLat = this.props.lat;
-    this.lastLng = this.props.lng
-
+    // this.componentDidUpdate();
+    var self = this;
     var map = new GMaps({
       el: '#map',
       lat: this.props.lat,
       lng: this.props.lng,
-      click: function(e) {
-        map.addMarker({
-          address: e.latLng.lat().toString() + e.latLng.lng().toString(),
-          lat: e.latLng.lat(),
-          lng: e.latLng.lng(),
-          details: {
-            note: "I LOVE this place."
-          },
-          infoWindow: {
-            content: '<p>Dat info dohhh</p>'
-          }
-        });
-        bindContext.addFavBreadCrumb(e.latLng.lat(), e.latLng.lng(), Date.now(), {note: "I LOVE this place."}, {content: '<p>Dat info dohhh</p>'});
-      },
       styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]}]
 
     });
 
-    // Adding a marker to the location we are showing
+    //Right Click Menu
+    map.setContextMenu({
+      control: 'map',
+      options: [{
+        title: 'Add Bread Crumb',
+        name: 'add_bread_crumb',
+        action: function(e) {
+          var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
+          self.props.searchAddress(addressString);
+          var id = self.props.favorites.length;
+          this.addMarker({
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng(),
+            title: 'New marker',
+            id: id,
+            // infoWindow: {
+            //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
+            // },
+            click: function(e) {
+              console.log(e.id);
+              // console.log(self.props.favorites);
+
+            }
+          });
+          // self.addFavBreadCrumb(id, e.latLng.lat(), e.latLng.lng(), Date.now(), {note: "I LOVE this place."}, {content: '<p>Dat info dohhh</p>'});
+        }
+      }, {
+        title: 'Center here',
+        name: 'center_here',
+        action: function(e) {
+          this.setCenter(e.latLng.lat(), e.latLng.lng());
+        }
+      }]
+    });
     
-    map.addMarker({
-      lat: this.props.lat,
-      lng: this.props.lng
-      // icon: '/'
+    // map.addMarkers(this.props.favorites);
+    this.props.favorites.forEach(function(favorite, index){
+      map.addMarker({
+        lat: favorite.lat,
+        lng: favorite.lng,
+        title: 'New marker',
+        id: index,
+        click: function(e) {
+          console.log(e);
+          console.log(e.id);
+        }
+      });
+
     });
 
-    map.addMarkers(this.props.favorites);
+  },
+
+  componentDidUpdate(){
+    console.log("Update");
+    // map.addMarkers(this.props.favorites);
+
+    // if(this.lastLat == this.props.lat && this.lastLng == this.props.lng){
+
+    //   // The map has already been initialized at this address.
+    //   // Return from this method so that we don't reinitialize it
+    //   // (and cause it to flicker).
+
+    //   return;
+    // }
+
+    // var bindContext = this;
+    // var self = this;
+    // this.lastLat = this.props.lat;
+    // this.lastLng = this.props.lng
+
+    // var map = new GMaps({
+    //   el: '#map',
+    //   lat: this.props.lat,
+    //   lng: this.props.lng,
+    //   click: function(e) {
+    //     var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
+    //     // self.searchForAddress(addressString);
+    //     self.props.searchAddress(addressString);
+    //     map.addMarker({
+    //       address: e.latLng.lat().toString() + e.latLng.lng().toString(),
+    //       lat: e.latLng.lat(),
+    //       lng: e.latLng.lng(),
+    //       details: {
+    //         note: "I LOVE this place."
+    //       },
+    //       infoWindow: {
+    //         content: '<p>Dat info dohhh</p>'
+    //       }
+    //     });
+    //     bindContext.addFavBreadCrumb(e.latLng.lat(), e.latLng.lng(), Date.now(), {note: "I LOVE this place."}, {content: '<p>Dat info dohhh</p>'});
+    //   },
+    //   styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]}]
+
+    // });
+
+    // map.setContextMenu({
+    //   control: 'map',
+    //   options: [{
+    //     title: 'Add Bread Crumb',
+    //     name: 'add_bread_crumb',
+    //     action: function(e) {
+    //       var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
+    //       console.log("rightclick")
+    //       self.searchAddress(addressString);
+    //       this.addMarker({
+    //         lat: e.latLng.lat(),
+    //         lng: e.latLng.lng(),
+    //         title: 'New marker',
+    //         // infoWindow: {
+    //         //   content: '<p>HTML Content</p>'
+    //         // },
+    //         click: function(e) {
+    //           console.log(e);
+    //         }
+    //       });
+    //     }
+    //   }, {
+    //     title: 'Center here',
+    //     name: 'center_here',
+    //     action: function(e) {
+    //       this.setCenter(e.latLng.lat(), e.latLng.lng());
+    //     }
+    //   }]
+    // });
+
+    // Adding a marker to the location we are showing
+    
+    // map.addMarker({
+    //   lat: this.props.lat,
+    //   lng: this.props.lng
+    //   // icon: '/'
+    // });
+
+    // map.addMarkers(this.props.favorites);
+
+  },
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log("submitted");
+    var id = this.props.favorites.length;
+    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, Date.now(), {note: this.state.comment}, {content: '<p>Dat info dohhh</p>'}, this.state.location);
 
   },
 
@@ -78,6 +192,15 @@ var Map = React.createClass({
         <p>Loading......</p>
         <div id="map"></div>
       </div>
+      <form  onSubmit={this.handleSubmit} className="form-group list-group col-xs-12 col-md-6 col-md-offset-3" >
+        <label htmlFor="location">Location:</label>
+        <input type="text" className="form-control" id="location" value={this.props.address} placeholder="Location" />
+        <label htmlFor="comment">Comment:</label>
+        <textarea value={this.state.comment} onChange={this.handleCommentChange} className="form-control" rows="10" id="comment"></textarea>
+        <div>
+          <input type="submit" className="btn btn-primary" value="Save Breadcrumb" />
+        </div>
+      </form>
       </div>
     );
   }
