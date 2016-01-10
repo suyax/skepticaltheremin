@@ -17,7 +17,7 @@ mongoose.connect(MONGO_DB || 'mongodb://localhost/maps');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-app.use(express.static(path.join(__dirname, "./public")));
+app.use(express.static(path.join(__dirname, "/public")));
     
 
 //redirect to home at a hash url
