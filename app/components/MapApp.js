@@ -124,6 +124,7 @@ var MapApp = React.createClass({
 
   searchForAddress(address, cb){
     var self = this;
+    console.log("search called", address);
 
     // We will use GMaps' geocode functionality,
     // which is built on top of the Google Maps API
@@ -144,7 +145,9 @@ var MapApp = React.createClass({
           }
         });
 
-        cb(results[0].formatted_address);
+        if(cb){
+          cb(results[0].formatted_address); 
+        }
 
       }
     });
