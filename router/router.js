@@ -8,6 +8,8 @@ var router = express.Router();
 var userController = require('../controllers/userControllers.js');
 //*Requirerd by server.js*
 
+console.log('using router...')
+
 //////////////////
 //users 
 //////////////////
