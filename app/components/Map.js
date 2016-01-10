@@ -5,7 +5,9 @@ var Map = React.createClass({
     return {
       location: '',
       lat: this.props.lat,
-      lng: this.props.lng
+      lng: this.props.lng,
+      previousMarker: null,
+      currentMarker: null
     }
   },
   handleLocationChange(e) {
@@ -20,7 +22,24 @@ var Map = React.createClass({
   },
 
   addFavBreadCrumb(id, lat, lng, timestamp, details, infoWindow, location) {
+    console.log(location);
     this.props.onAddToFavBcs(id, lat, lng, timestamp, details, infoWindow, location);
+  },
+
+  updateCurrentLocation(){
+    if(this.state.previousMarker){
+      this.state.previousMarker.setIcon({
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        strokeColor: "red",
+        scale: 5
+      });
+    }
+    this.state.currentMarker.setIcon({
+      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+      strokeColor: "green",
+      scale: 5
+    });
+    this.state.previousMarker = this.state.currentMarker;
   },
 
   componentDidMount(){
@@ -56,13 +75,19 @@ var Map = React.createClass({
             lng: e.latLng.lng(),
             title: 'New marker',
             id: id,
+            icon: {
+              path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+              strokeColor: "red",
+              scale: 5
+            },
             // infoWindow: {
             //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
             // },
             click: function(e) {
               console.log(e.id);
-              // console.log(self.props.favorites);
-
+              self.setState({currentMarker: this});
+              self.updateCurrentLocation();
+              // this.setMap(null);
             }
           });
           // self.addFavBreadCrumb(id, e.latLng.lat(), e.latLng.lng(), Date.now(), {note: "I LOVE this place."}, {content: '<p>Dat info dohhh</p>'});
@@ -83,9 +108,17 @@ var Map = React.createClass({
         lng: favorite.lng,
         title: 'New marker',
         id: index,
+        icon: {
+          path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+          strokeColor: "red",
+          scale: 5
+        },
         click: function(e) {
-          console.log(e);
+          // console.log(e);
           console.log(e.id);
+          self.setState({currentMarker: this});
+          self.updateCurrentLocation();
+          // self.state.currentMarker.setMap(null);
         }
       });
 
@@ -183,7 +216,7 @@ var Map = React.createClass({
     console.log("submitted");
     var id = this.props.favorites.length;
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, Date.now(), {note: this.state.comment}, {content: '<p>Dat info dohhh</p>'}, this.state.location);
-
+    // this.state.currentMarker.setMap(null);
   },
 
   render(){
