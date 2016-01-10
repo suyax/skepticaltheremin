@@ -7,7 +7,7 @@ module.exports = {
   // the top-level file that then `requires` some other files, which then
   // `require` some other files, etc. Webpack pulls these all into a modularized
   // bundle.
-  entry: './app/App.js',
+  entry: './app/app.js',
 
   // `output` is an object with options for the bundle that Webpack creates
   // out of your source files.
@@ -22,7 +22,7 @@ module.exports = {
     // your bundle will be written, while `publicPath` tells your Webpack modules
     // where your bundle can be requested from the server. In this repo, `publicPath`
     // tells the webpack-dev-server that it's ok to serve the files in the dist folder.
-    publicPath: 'publid',
+    publicPath: 'public',
 
     // `filename` tells Webpack what to call the file/files it outputs.
     filename: 'bundle.js',
