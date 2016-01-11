@@ -4,7 +4,6 @@ var User = require('../models/user.js');
 var Pin = require('../models/pin.js');
 var UserController = require('../controllers/userControllers.js');
 
-
 var dbURI = 'mongodb://localhost/mapstest';
 
 
@@ -84,6 +83,7 @@ describe('User Controller', function () {
     UserController.updatePins({username: username}, newpin, function(err, enteredPin) {
       // console.log('entered pin', enteredPin)
       expect(enteredPin.lat).to.equal(-122.40644931793213);
+
     });
     done();
 
@@ -106,7 +106,6 @@ describe('User Controller', function () {
       expect(res.length).to.equal(3);
     });
     done();
-
 
   });
 
