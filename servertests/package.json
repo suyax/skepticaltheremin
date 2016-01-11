@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "test": "mocha modelTest.js"
+    "test": "mocha modelTest.js user"
   }
 }
