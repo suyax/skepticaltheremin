@@ -27,6 +27,7 @@ router.route('/users')
 router.route('/users')
   .post(function (req, res) {
     //example:
+    console.log("post to /users", req.body.username,req.body.password);
     var newuser = {
       username: req.body.username,
       password: req.body.password,
@@ -35,9 +36,10 @@ router.route('/users')
 
     userController.addUser(newuser, function(err, pins){
        if (err) {
+        console.log(err);
         return res.json({err: err});
       }
-      res.redirect("/#map");
+      res.status(201).json(pins);
     });
   });
 

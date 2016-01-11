@@ -128,7 +128,7 @@ var Map = React.createClass({
     
 
     map.addMarkers(this.props.favorites);
-    helpers.getAllBreadCrumbs("testuser", function(data){
+    helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
       }
