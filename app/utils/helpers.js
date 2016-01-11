@@ -1,6 +1,6 @@
-var request = require('request');
 
-exports.getAllBreadCrumbs = function(username, cb) {
+var getAllBreadCrumbs = function(username, cb) {
+  console.log(username);
   $.ajax({
     url: '/api/maps/' + username,
     type: 'GET',
@@ -15,12 +15,13 @@ exports.getAllBreadCrumbs = function(username, cb) {
   });
 };
 
-exports.addBreadCrumb = function(username, bcInfo, cb) {
+var addBreadCrumb = function(username, breadcrumb, cb) {
+  console.log(username);
   $.ajax({
     url: '/api/maps/' + username,
     dataType: 'json',
     type: 'PUT',
-    data: bcInfo,
+    data: breadcrumb,
     success: function(data) {
       // this.setState({data: data});
       console.log(data);
@@ -31,5 +32,10 @@ exports.addBreadCrumb = function(username, bcInfo, cb) {
     }
   });
 };
+
+var helpers = {
+  getAllBreadCrumbs: getAllBreadCrumbs,
+  addBreadCrumb: addBreadCrumb
+}
 
 module.exports = helpers;

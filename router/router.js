@@ -28,7 +28,7 @@ router.route('/users')
   .post(function (req, res) {
     //example:
     var newuser = {
-      userName: req.body.userName,
+      userName: req.body.username,
       password: req.body.password,
       pins: []
     }

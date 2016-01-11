@@ -5,6 +5,8 @@ var Map = require('./Map');
 var CurrentLocation = require('./CurrentLocation');
 var LocationList = require('./LocationList');
 var SearchUser = require('./SearchUser');
+var helpers = require('../utils/helpers');
+
 
 var MapApp = React.createClass({
 
@@ -61,7 +63,7 @@ var MapApp = React.createClass({
     console.log(arguments);
     var favorites = this.state.favorites;
     console.log(this.state.currentAddress);
-    favorites.push({
+    var breadcrumb = {
       id: id,
       lat: lat,
       lng: lng,
@@ -69,13 +71,18 @@ var MapApp = React.createClass({
       details: details,
       address: this.state.currentAddress,
       location: location
-    });
+    };
+    favorites.push(breadcrumb);
 
     this.setState({
       favorites: favorites
     });
 
+    helpers.addBreadCrumb("testuser", breadcrumb, function(data){
+      console.log(data);
+    });
     localStorage.favorites = JSON.stringify(favorites);
+
   },
 
   removeFromFavorites(address){
@@ -160,7 +167,7 @@ var MapApp = React.createClass({
 
       <div>
         <h1>Breadcrumbs</h1>
-        <SearchUser url="/api/users"/>
+        <SearchUser url="/api/maps"/>
         <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
         <Search onSearch={this.searchForAddress} />
 
