@@ -92,6 +92,7 @@ router.route('/maps/:username')
     } else {
       res.json({})
     }
+
   });
 
 // delete last pin from array

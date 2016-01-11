@@ -80,7 +80,7 @@ exports.removeLastPin = function (name, callback) {
     console.log('doc:', doc)
     if(doc){
       var poppedPin = doc.pins.pop();
-      console.log('popped pin', poppedPin)
+
       doc.save();
     }
     callback(null, poppedPin);
