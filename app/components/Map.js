@@ -24,7 +24,7 @@ var Map = React.createClass({
   },
 
   matchBreadCrumb(timestamp){
-    var breadcrumbs = this.state.breadcrumbs;
+    var breadcrumbs = this.props.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
       if(breadcrumb.timestamp === timestamp){
@@ -128,7 +128,7 @@ var Map = React.createClass({
     console.log("favorites", this.props.favorites);
     
 
-    // map.addMarkers(this.props.favorites);
+    // map.addMarkers(this.props.favorites); //no longer used
     helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
@@ -157,39 +157,13 @@ var Map = React.createClass({
       });
     });
 
-    /*
-    this.props.favorites.forEach(function(favorite, index){
-      map.addMarker({
-        lat: favorite.lat,
-        lng: favorite.lng,
-        title: 'New marker',
-        id: index,
-        timestamp: favorite.timestamp,
-        icon: {
-          path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-          strokeColor: "red",
-          scale: 5
-        },
-        click: function(e) {
-          // console.log(e);
-          console.log(e.id);
-          console.log(e.timestamp);
-          self.setState({currentMarker: this});
-          self.updateCurrentLocation();
-          self.matchBreadCrumb(e.timestamp);
-          // self.state.currentMarker.setMap(null);
-        }
-      });
-
-    });
-    */
-
   },
 
   componentDidUpdate(){
-    // this.setState({location: this.props.address});
-    // map.addMarkers(this.props.favorites);
-
+    if(this.props.favorites.length !== this.state.breadcrumbs.length){
+      this.setState({breadcrumbs: this.props.favorites});
+      return;
+    }
     if(this.lastLat == this.props.center.lat && this.lastLng == this.props.center.lng){
 
       // The map has already been initialized at this address.
