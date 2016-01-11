@@ -5,6 +5,7 @@ var Map = React.createClass({
   getInitialState(){
     return {
       location: '',
+      breadcrumbs: [],
       lat: this.props.lat,
       lng: this.props.lng,
       previousMarker: null,
@@ -23,7 +24,7 @@ var Map = React.createClass({
   },
 
   matchBreadCrumb(timestamp){
-    var breadcrumbs = this.props.favorites;
+    var breadcrumbs = this.state.breadcrumbs;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
       if(breadcrumb.timestamp === timestamp){
@@ -127,13 +128,13 @@ var Map = React.createClass({
     console.log("favorites", this.props.favorites);
     
 
-    map.addMarkers(this.props.favorites);
+    // map.addMarkers(this.props.favorites);
     helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
       }
-      self.setState({favorites: data.pins});
-      self.state.favorites.forEach(function(favorite, index){
+      self.setState({breadcrumbs: data.pins});
+      self.state.breadcrumbs.forEach(function(favorite, index){
         map.addMarker({
           lat: favorite.lat,
           lng: favorite.lng,

@@ -24,8 +24,8 @@ var MapApp = React.createClass({
     // Nobody would get mad if we center it on Paris by default
 
     return {
-      user: '',
-      loggedin: true,
+      user: 'userplaceholder',
+      loggedin: false,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
@@ -41,18 +41,18 @@ var MapApp = React.createClass({
 
   loginUser(username){
     console.log("logged in:", username);
-    this.setState({user: username, loggedin: true});
-  },
-
-  componentWillMount(){
-
-    helpers.getAllBreadCrumbs(this.state.user, function(data){
-      console.log("helo");
-      console.log(data);
+    this.setState({user: username, loggedin: true}); 
+    helpers.getAllBreadCrumbs(username, function(data){
       if(data){
+        console.log("breadcrumbs found");
         this.setState({favorites: data.pins});
+        console.log(this.state.favorites);
       }
     }.bind(this));
+
+  },
+
+  componentDidMount(){
   },
 
   toggleFavorite(address){
