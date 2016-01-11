@@ -16,7 +16,7 @@ var Search = React.createClass({
     
     // When the form is submitted, call the onSearch callback that is passed to the component
 
-    this.props.onSearch(this.state.value);
+    this.props.onSearch(this.state.value, null, true);
 
     // Unfocus the text input field
     this.getDOMNode().querySelector('input').blur();

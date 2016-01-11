@@ -16,9 +16,9 @@ var MapApp = React.createClass({
 
     var favorites = [];
 
-    if(localStorage.favorites){
-      favorites = JSON.parse(localStorage.favorites);
-    }
+    // if(localStorage.favorites){
+    //   favorites = JSON.parse(localStorage.favorites);
+    // }
 
     // Nobody would get mad if we center it on Paris by default
 
@@ -28,8 +28,23 @@ var MapApp = React.createClass({
       mapCoordinates: {
         lat: 37.7836966,
         lng: -122.4089664
+      },
+      center: {
+        lat: 37.7836966,
+        lng: -122.4089664
       }
     };
+  },
+
+  componentWillMount(){
+
+    helpers.getAllBreadCrumbs("testuser", function(data){
+      console.log("helo");
+      console.log(data);
+      if(data){
+        this.setState({favorites: data.pins});
+      }
+    }.bind(this));
   },
 
   toggleFavorite(address){
@@ -129,7 +144,7 @@ var MapApp = React.createClass({
     return false;
   },
 
-  searchForAddress(address, cb){
+  searchForAddress(address, cb, recenter){
     var self = this;
     console.log("search called", address);
 
@@ -152,6 +167,15 @@ var MapApp = React.createClass({
           }
         });
 
+        if(recenter){
+          self.setState({
+            center: {
+              lat: latlng.lat(),
+              lng: latlng.lng()
+            }
+          });
+        }
+
         if(cb){
           cb(results[0].formatted_address); 
         }
@@ -166,8 +190,6 @@ var MapApp = React.createClass({
     return (
 
       <div>
-        <h1>Breadcrumbs</h1>
-        <SearchUser url="/api/maps"/>
         <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
         <Search onSearch={this.searchForAddress} />
 
@@ -177,7 +199,8 @@ var MapApp = React.createClass({
           onFavoriteToggle={this.toggleFavorite}
           onAddToFavBcs={this.addToFavBreadCrumbs}
           searchAddress={this.searchForAddress}
-          address={this.state.currentAddress} />
+          address={this.state.currentAddress} 
+          center={this.state.center}/>
 
         <LocationList locations={this.state.favorites}
           activeLocationAddress={this.state.currentAddress} 
