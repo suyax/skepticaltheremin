@@ -108,7 +108,7 @@ router.route('/maps/:username')
     // userController.removeLastPin({username: username}, function(err, pins){
     //    if (err) {
     var pinId = req.body._id;
-    userController.deletePin({userName: username}, pinId, function(err, doc) {
+    userController.deletePin({username: username}, pinId, function(err, doc) {
       if (err) {
         return res.json({err: err});
       }
