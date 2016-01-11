@@ -24,7 +24,7 @@ var MapApp = React.createClass({
     // Nobody would get mad if we center it on Paris by default
 
     return {
-      user: 'userplaceholder',
+      user: '',
       loggedin: false,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
@@ -44,9 +44,7 @@ var MapApp = React.createClass({
     this.setState({user: username, loggedin: true}); 
     helpers.getAllBreadCrumbs(username, function(data){
       if(data){
-        console.log("breadcrumbs found");
         this.setState({favorites: data.pins});
-        console.log(this.state.favorites);
       }
     }.bind(this));
 
@@ -83,9 +81,7 @@ var MapApp = React.createClass({
   },
 
   addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
-    console.log(arguments);
     var favorites = this.state.favorites;
-    console.log(this.state.currentAddress);
     var breadcrumb = {
       id: id,
       lat: lat,
