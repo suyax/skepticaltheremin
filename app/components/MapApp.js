@@ -25,7 +25,7 @@ var MapApp = React.createClass({
 
     return {
       user: '',
-      loggedin: true,
+      loggedin: false,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
@@ -41,18 +41,16 @@ var MapApp = React.createClass({
 
   loginUser(username){
     console.log("logged in:", username);
-    this.setState({user: username, loggedin: true});
-  },
-
-  componentWillMount(){
-
-    helpers.getAllBreadCrumbs(this.state.user, function(data){
-      console.log("helo");
-      console.log(data);
+    this.setState({user: username, loggedin: true}); 
+    helpers.getAllBreadCrumbs(username, function(data){
       if(data){
         this.setState({favorites: data.pins});
       }
     }.bind(this));
+
+  },
+
+  componentDidMount(){
   },
 
   toggleFavorite(address){
@@ -83,9 +81,7 @@ var MapApp = React.createClass({
   },
 
   addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
-    console.log(arguments);
     var favorites = this.state.favorites;
-    console.log(this.state.currentAddress);
     var breadcrumb = {
       id: id,
       lat: lat,
