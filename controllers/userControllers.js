@@ -13,7 +13,6 @@ var Pin = require('../models/pin.js');
 //Adds a new user; called when api/users hears a post request.
 exports.addUser = function(name, callback) {
   User.create(name, function (err, person) {
-
     if (err) {
       callback(err);
       return;

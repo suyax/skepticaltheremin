@@ -2,14 +2,14 @@ var expect = require('chai').expect;
 var mongoose = require('mongoose');
 var User = require('../models/user.js');
 var Pin = require('../models/pin.js');
-var UserController = require('../controllers/userControllers');
+var UserController = require('../controllers/userControllers.js');
 
 
 var dbURI = 'mongodb://localhost/mapstest';
 
-var clearDB = function (done) {
-  mongoose.connection.collections['users'].remove(done);
-};
+
+  describe('User Model', function () {
+
 
 describe('User Controller', function () {
   // Connect to database before any tests
@@ -107,9 +107,11 @@ describe('User Controller', function () {
     });
     done();
 
+
   });
 
 
 });
+
 
 
