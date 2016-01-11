@@ -7,7 +7,8 @@ var pinSchema = new mongoose.Schema({
   lat: Number,
   lng: Number,
   details: {},
-  timestamp: Date
+  timestamp: Date,
+  location: String
 });
 
 

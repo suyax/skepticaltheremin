@@ -1,4 +1,5 @@
 var React = require('react');
+var helpers = require('../utils/helpers');
 
 var SearchUser = React.createClass({
   getInitialState: function() {
@@ -13,20 +14,8 @@ var SearchUser = React.createClass({
     if (!username) {
       return;
     }
-    // this.props.onCommentSubmit({username: username});
-    $.ajax({
-      url: this.props.url + '/' + username,
-      // dataType: 'json',
-      // type: 'POST',
-      // data: comment,
-      type: 'GET',
-      success: function(data) {
-        // this.setState({data: data});
-        console.log(data);
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
+    helpers.getAllBreadCrumbs(username, function(data){
+      console.log(data);
     });
     this.setState({username: ''});
   },
