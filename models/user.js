@@ -1,13 +1,14 @@
 var mongoose = require('mongoose');
 
 var Pin =  require('./pin.js')
+
 //esting with simple array for pins value
 
 var userSchema = new mongoose.Schema({
   username: { type: String, index: { unique: true } },
   password: String,
   pins: Array
-  // pins: [{ type: Schema.Types.ObjectId, ref: 'Pin' }]
+  //[{type: Schema.Type.ObjectId, ref: 'Pin'}]
 
 });
 
