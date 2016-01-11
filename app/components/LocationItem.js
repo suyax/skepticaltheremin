@@ -5,7 +5,7 @@ var moment = require('moment');
 var LocationItem = React.createClass({
 
   handleClick(){
-    this.props.onClick(this.props.address);
+    this.props.onClick(this.props.address, null, true);
   },
 
   render(){

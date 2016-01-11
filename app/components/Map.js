@@ -10,7 +10,7 @@ var Map = React.createClass({
       previousMarker: null,
       currentMarker: null,
       lastMarkerTimeStamp: null,
-      favorites: []
+      map: null
     }
   },
   
@@ -23,7 +23,7 @@ var Map = React.createClass({
   },
 
   matchBreadCrumb(timestamp){
-    var breadcrumbs = this.state.favorites;
+    var breadcrumbs = this.props.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
       if(breadcrumb.timestamp === timestamp){
@@ -74,6 +74,8 @@ var Map = React.createClass({
 
     });
 
+    this.setState({map: map});
+
     //Right Click Menu
     map.setContextMenu({
       control: 'map',
@@ -83,7 +85,7 @@ var Map = React.createClass({
         action: function(e) {
           var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
           self.props.searchAddress(addressString, function(newLocation){
-            self.setState({location: newLocation});
+            self.setState({location: newLocation, comment: "Add comments here and save breadcrumb"});
           });
           var id = self.props.favorites.length;
           var time = Date.now();
@@ -121,8 +123,11 @@ var Map = React.createClass({
         }
       }]
     });
+
+    console.log("favorites", this.props.favorites);
     
-    // map.addMarkers(this.props.favorites);
+
+    map.addMarkers(this.props.favorites);
     helpers.getAllBreadCrumbs("testuser", function(data){
       if(!data){
         return;
@@ -184,19 +189,18 @@ var Map = React.createClass({
     // this.setState({location: this.props.address});
     // map.addMarkers(this.props.favorites);
 
-    // if(this.lastLat == this.props.lat && this.lastLng == this.props.lng){
+    if(this.lastLat == this.props.center.lat && this.lastLng == this.props.center.lng){
 
-    //   // The map has already been initialized at this address.
-    //   // Return from this method so that we don't reinitialize it
-    //   // (and cause it to flicker).
+      // The map has already been initialized at this address.
+      // Return from this method so that we don't reinitialize it
+      // (and cause it to flicker).
 
-    //   return;
-    // }
+      return;
+    }
 
-    // var bindContext = this;
-    // var self = this;
-    // this.lastLat = this.props.lat;
-    // this.lastLng = this.props.lng
+    this.state.map.setCenter(this.props.center.lat, this.props.center.lng);
+    this.lastLat = this.props.center.lat;
+    this.lastLng = this.props.center.lng
 
     // var map = new GMaps({
     //   el: '#map',

@@ -117,3 +117,7 @@ a.list-group-item span.createdAt {
 textarea {
   resize: vertical;
 }
+
+body { 
+    padding-top: 65px; 
+}
