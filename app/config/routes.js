@@ -12,6 +12,7 @@ var MapApp = require('../components/MapApp');
 
 module.exports = (
   <Route path="/" component={Main}>
+    <IndexRoute component={MapApp} />
     <Route name="login" path="login" component={Login} />
     <Route name="home" path="home" component={Home} />
     <Route name="map" path="map" component={MapApp} />

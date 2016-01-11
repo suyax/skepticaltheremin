@@ -6,6 +6,7 @@ var CurrentLocation = require('./CurrentLocation');
 var LocationList = require('./LocationList');
 var SearchUser = require('./SearchUser');
 var helpers = require('../utils/helpers');
+var Signup = require('./Signup');
 
 
 var MapApp = React.createClass({
@@ -23,6 +24,8 @@ var MapApp = React.createClass({
     // Nobody would get mad if we center it on Paris by default
 
     return {
+      user: '',
+      loggedin: true,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
@@ -36,9 +39,14 @@ var MapApp = React.createClass({
     };
   },
 
+  loginUser(username){
+    console.log("logged in:", username);
+    this.setState({user: username, loggedin: true});
+  },
+
   componentWillMount(){
 
-    helpers.getAllBreadCrumbs("testuser", function(data){
+    helpers.getAllBreadCrumbs(this.state.user, function(data){
       console.log("helo");
       console.log(data);
       if(data){
@@ -93,7 +101,7 @@ var MapApp = React.createClass({
       favorites: favorites
     });
 
-    helpers.addBreadCrumb("testuser", breadcrumb, function(data){
+    helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
       console.log(data);
     });
     localStorage.favorites = JSON.stringify(favorites);
@@ -186,29 +194,34 @@ var MapApp = React.createClass({
   },
 
   render(){
+    if(this.state.loggedin){
+      return (
 
-    return (
+        <div>
+          <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
+          <Search onSearch={this.searchForAddress} />
 
-      <div>
-        <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
-        <Search onSearch={this.searchForAddress} />
+          <Map lat={this.state.mapCoordinates.lat}
+            lng={this.state.mapCoordinates.lng}
+            favorites={this.state.favorites}
+            onFavoriteToggle={this.toggleFavorite}
+            onAddToFavBcs={this.addToFavBreadCrumbs}
+            searchAddress={this.searchForAddress}
+            address={this.state.currentAddress} 
+            center={this.state.center} 
+            loginUser={this.loginUser}
+            user={this.state.user} />
 
-        <Map lat={this.state.mapCoordinates.lat}
-          lng={this.state.mapCoordinates.lng}
-          favorites={this.state.favorites}
-          onFavoriteToggle={this.toggleFavorite}
-          onAddToFavBcs={this.addToFavBreadCrumbs}
-          searchAddress={this.searchForAddress}
-          address={this.state.currentAddress} 
-          center={this.state.center}/>
+          <LocationList locations={this.state.favorites}
+            activeLocationAddress={this.state.currentAddress} 
+            onClick={this.searchForAddress} />
 
-        <LocationList locations={this.state.favorites}
-          activeLocationAddress={this.state.currentAddress} 
-          onClick={this.searchForAddress} />
+        </div>
 
-      </div>
-
-    );
+      );
+    } else {
+      return <Signup loginUser={this.loginUser}/>
+    }
   }
 
 });
