@@ -87,7 +87,8 @@ router.route('/maps/:username')
        if (err) {
         return res.json({err: err});
       }
-      res.json(pins);
+      res.redirect('/#maps')
+
     });
   });
 

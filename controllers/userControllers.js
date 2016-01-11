@@ -10,11 +10,10 @@ var Pin = require('../models/pin.js');
 //users controllers
 //////////////////
 
-//userControllers.js is required by router/router.js
-
 //Adds a new user; called when api/users hears a post request.
 exports.addUser = function(name, callback) {
   User.create(name, function (err, person) {
+
     if (err) {
       callback(err);
       return;
@@ -39,8 +38,8 @@ exports.removeUser = function(name, callback) {
 //////////////////
 
 //find pins of single user
-exports.findOne = function (name, callback) {
-  User.findOne(name, function (err, person) {
+exports.findOne = function (query, callback) {
+  User.findOne(query, function (err, person) {
     if (err) {
       callback(err);
       return;
@@ -70,7 +69,8 @@ exports.updatePins = function (query, newPin, callback) {
 //remove last pin: only used in testing
 exports.removeLastPin = function (name, callback) {
 
-  User.findOne(name, function (err, doc) {
+
+  User.findOne(query, function (err, doc) {
     console.log('remove from database')
     if (err) {
       callback(err);
@@ -78,10 +78,10 @@ exports.removeLastPin = function (name, callback) {
     }
 
     if(doc){
-      doc.pins.pop();
+      var poppedPin = doc.pins.pop();
       doc.save();
     }
-    callback(null, doc);
+    callback(null, poppedPin);
   
   });
 

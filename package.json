@@ -28,8 +28,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --inline --hot --content-base public/",
-    "testserver": "mocha servertests/userControllersTest.js"
+    "start": "webpack-dev-server --inline --hot --content-base public/"
   },
   "author": "",
   "license": "ISC"
