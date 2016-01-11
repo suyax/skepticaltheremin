@@ -124,6 +124,9 @@ var Map = React.createClass({
     
     // map.addMarkers(this.props.favorites);
     helpers.getAllBreadCrumbs("testuser", function(data){
+      if(!data){
+        return;
+      }
       self.setState({favorites: data.pins});
       self.state.favorites.forEach(function(favorite, index){
         map.addMarker({
