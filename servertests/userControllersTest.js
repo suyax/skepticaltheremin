@@ -76,7 +76,6 @@ describe('User Controller', function () {
   });
 
   it('should have a method that given the name of a user, updates their pins, i.e., add a new breadcrumb', function (done) {
-
     var username = 'Ian';
     var newpin = {"lat":37.78650430839168,"lng":-122.40644931793213,"timestamp":1452391678701,"details":{"note":"I meh this place."},"infoWindow":{"content":"<p>llllalala</p>"}};
 
@@ -111,6 +110,4 @@ describe('User Controller', function () {
 
 
 });
-
-
 
