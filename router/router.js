@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 
 var router = express.Router();
 var userController = require('../controllers/userControllers.js');
+//*Requirerd by server.js*
 
 //////////////////
 //users 
@@ -104,9 +105,6 @@ router.route('/maps/:username')
 router.route('/maps/:username')
   .delete(function (req, res) {
     var username = req.params.username;
-
-    // userController.removeLastPin({username: username}, function(err, pins){
-    //    if (err) {
     var pinId = req.body._id;
     userController.deletePin({username: username}, pinId, function(err, doc) {
       if (err) {
@@ -116,19 +114,6 @@ router.route('/maps/:username')
     });
   });
 
-//need to refactor to delete specific pin. current controller not working
-  // router.route('/maps/:username')
-  // .delete(function (req, res) {
 
-  //   var username = req.params.username;
-  //   // var pinId = "5692934152a5369a1a9f6fa8"
-  //   var pinId = req.body;
-  //   userController.removePin({username: username}, pinId, function(err, doc){
-  //      if (err) {
-  //       return res.json({err: err});
-  //     }
-  //     res.json(doc);
-  //   });
-  // });
 
 module.exports = router;
