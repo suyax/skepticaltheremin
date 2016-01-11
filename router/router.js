@@ -28,7 +28,7 @@ router.route('/users')
   .post(function (req, res) {
     //example:
     var newuser = {
-      userName: req.body.username,
+      username: req.body.username,
       password: req.body.password,
       pins: []
     }
@@ -37,14 +37,14 @@ router.route('/users')
        if (err) {
         return res.json({err: err});
       }
-      res.json(pins);
+      res.redirect("/#map");
     });
   });
 
 //delete user
 router.route('/users')
   .delete(function (req, res) {
-    userController.removeUser({userName: req.body.userName}, function(err, user){
+    userController.removeUser({username: req.body.username}, function(err, user){
        if (err) {
         return res.json({err: err});
       }
@@ -61,7 +61,7 @@ router.route('/maps/:username')
   .get(function (req, res) {
     var username = req.params.username;
 
-    userController.findOne({userName: username}, function(err, person){
+    userController.findOne({username: username}, function(err, person){
       if (err) {
         return res.json({err: err})
       }
@@ -78,7 +78,7 @@ router.route('/maps/:username')
     console.log('put username', username)
     console.log('newpint', newpin);
 
-    userController.updatePins({userName: username}, newpin, function(err, pins){
+    userController.updatePins({username: username}, newpin, function(err, pins){
        if (err) {
         return res.json({err: err});
       }
@@ -90,7 +90,7 @@ router.route('/maps/:username')
 router.route('/maps/:username')
   .delete(function (req, res) {
     var username = req.params.username;
-    userController.removeLastPin({userName: username}, function(err, pins){
+    userController.removeLastPin({username: username}, function(err, pins){
        if (err) {
         return res.json({err: err});
       }
@@ -105,7 +105,7 @@ router.route('/maps/:username')
   //   var username = req.params.username;
   //   // var pinId = "5692934152a5369a1a9f6fa8"
   //   var pinId = req.body;
-  //   userController.removePin({userName: username}, pinId, function(err, doc){
+  //   userController.removePin({username: username}, pinId, function(err, doc){
   //      if (err) {
   //       return res.json({err: err});
   //     }
