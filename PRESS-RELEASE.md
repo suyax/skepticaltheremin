@@ -29,7 +29,7 @@ Once the project moves into development, the press release can be used as a touc
   The problem we want to solve is that people have no easy way to associate thoughts, moments, and memories with geographic locations.
 
 ## Solution ##
-  Breadcrumbs gives users a way to save, retrieve and explore these associations by dopping a "breadcrumb" on a location and typing a note to save on it. From there, they can browse and re-open any of these breadcrumbs whenever they log into their account.
+  Breadcrumbs gives users a way to save, retrieve and explore these associations by dropping a "breadcrumb" on a location and typing a note to save with it. From there, users can browse and re-open any of these breadcrumbs whenever they log into their account.
 
 ## Quote from You ##
   "With Breadcrumbs, users can make notes on any map location, completely free from the confines of pre-populated destinations and addresses, imposed by many location-based applications."

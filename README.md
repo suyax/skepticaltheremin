@@ -20,7 +20,7 @@ Your world. Your map.
 
 ## Usage
 
-> For development, run node (or nodemon) "server.js" to begin running the server. From there, it is a good idea to run "webpack --watch" while making changes to the code, so that it re-compiles as changes are saved. If you opt not to run "webpack --watch", you will still need to run "webpack" at least once, the first time, to compile the JavaScript into a file that will be called "bundle.js".
+> For development, run node (or nodemon) "server.js" to begin running the server. From there, it is a good idea to run "webpack --watch" while making changes to the client-side (React.js) code, so that it re-compiles as changes are saved. If you opt not to run "webpack --watch", you will still need to run "webpack" at least once, the first time, to compile the JavaScript into a file that will be called "bundle.js".
 
 ## Requirements
 
