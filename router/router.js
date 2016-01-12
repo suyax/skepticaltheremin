@@ -8,6 +8,8 @@ var router = express.Router();
 var userController = require('../controllers/userControllers.js');
 //*Requirerd by server.js*
 
+console.log('using router...')
+
 //////////////////
 //users 
 //////////////////
@@ -68,6 +70,7 @@ router.route('/maps/:username')
       if (err) {
         return res.json({err: err})
       }
+      //sends back entire person object currently. refactor to only the pins array
       res.json(person)
     });
   });
@@ -78,15 +81,19 @@ router.route('/maps/:username')
     var username = req.params.username;
     var newpin = req.body;
 
-    console.log('put username', username)
-    console.log('newpint', newpin);
+    if(JSON.stringify(newpin) !== JSON.stringify({})){  
+      userController.updatePins({username: username}, newpin, function(err, pins){
+         if (err) {
+          return res.json({err: err});
+        }
+        res.json(pins)
 
-    userController.updatePins({username: username}, newpin, function(err, pins){
-       if (err) {
-        return res.json({err: err});
-      }
-      res.json(pins);
-    });
+      });
+    } else {
+      res.json({})
+    }
+
+
   });
 
 // delete last pin from array

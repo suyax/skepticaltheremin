@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, "/public")));
     
 
 //redirect to home at a hash url
-// need to add middleware for actual loging authentication
+  // need to add middleware for actual loging authentication
 app.get('/signup', function(req, res){
   console.log('signup');
   res.redirect('/#map')
@@ -32,9 +32,14 @@ app.post('/login', function(req, res){
   res.redirect('/#map')
 })
 
-//api 
+
+//api routing
+
+
 app.use('/api', router);
 
 
 console.log('mapp app on port ' + port);
 app.listen(port);  
+
+module.exports = app;
