@@ -1,6 +1,6 @@
 # BreadCrumbs
 
-Your world. Your map.
+Your world. Your map. Your breadcrumbs.
 
 ## Team
 
