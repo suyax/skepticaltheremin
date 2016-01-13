@@ -62,6 +62,17 @@ router.route('/users')
 //////////////////
 
 //get array of pins for single user
+
+router.route('/maps')
+  .get(function (req, res) {
+    userController.getAllPins(function (err, res) {
+      if (err) {
+        return res.json({err: err});
+      }
+      res.json(pins);
+    })
+  })
+
 router.route('/maps/:username')
   .get(function (req, res) {
     var username = req.params.username;
@@ -80,10 +91,11 @@ router.route('/maps/:username')
   .put(function (req, res) {
     var username = req.params.username;
     var newpin = req.body;
+    newpin.username = username;
 
     if(JSON.stringify(newpin) !== JSON.stringify({})){  
       userController.updatePins({username: username}, newpin, function(err, pins){
-         if (err) {
+        if (err) {
           return res.json({err: err});
         }
         res.json(pins)

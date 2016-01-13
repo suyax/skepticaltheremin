@@ -51,7 +51,7 @@ describe('User Controller', function () {
           {
             username: 'lex',
             password: 'lexylex',
-            pins: [{"lat":37.78696217255432,"lng":-122.40696430206299,"timestamp":1452391665585,"details":{"note":"I LOVE this place."},"infoWindow":{"content":"<p>Dat info dohhh</p>"}}]
+            // pins: [{"lat":37.78696217255432,"lng":-122.40696430206299,"timestamp":1452391665585,"details":{"note":"I LOVE this place."},"infoWindow":{"content":"<p>Dat info dohhh</p>"}}]
           },
           {
             username: 'Ian',
@@ -60,7 +60,7 @@ describe('User Controller', function () {
           {
             username: 'Nikola',
             password: 'niki',
-            pins: [{"lat":37.78613123179135,"lng":-122.40491509437561,"timestamp":1452394116848,"details":{"note":"I hate this place."},"infoWindow":{"content":"<p>skip skip</p>"}}]
+            // pins: [{"lat":37.78613123179135,"lng":-122.40491509437561,"timestamp":1452394116848,"details":{"note":"I hate this place."},"infoWindow":{"content":"<p>skip skip</p>"}}]
           }
         ];
       User.create(users, done);
@@ -93,7 +93,8 @@ describe('User Controller', function () {
     var userSearchObj = {username: 'lex'};
 
     UserController.findOne(userSearchObj, function(err, res) {
-      expect(res.pins.timestamp).to.equal(1452391665585);
+      console.log(res);
+      expect(res.pins[0].timestamp).to.equal(1452391665585);
     });
     
     done();
@@ -103,7 +104,7 @@ describe('User Controller', function () {
   xit('should have a method that given the name of a user, updates their pins, i.e., add a new breadcrumb', function (done) {
     
     var username = 'Ian';
-    var newpin = {"lat":37.78650430839168,"lng":-122.40644931793213,"timestamp":1452391678701,"details":{"note":"I meh this place."},"infoWindow":{"content":"<p>llllalala</p>"}};
+    var newpin = {"lat":37.78650430839168,"lng":-122.40644931793213,"timestamp":1452391678701,"details":{"note":"I meh this place."}};
 
     UserController.updatePins({username: username}, newpin, function(err, enteredPin) {
       console.log('entered pin', enteredPin.lat === 37.78650430839168);
