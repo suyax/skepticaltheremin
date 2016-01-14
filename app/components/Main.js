@@ -1,4 +1,6 @@
 var React = require('react');
+var connect = require('react-redux').connect;
+var routeActions = require('redux-simple-router').routeActions;
 
 var Main = React.createClass({
   render: function(){

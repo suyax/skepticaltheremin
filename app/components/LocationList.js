@@ -6,6 +6,7 @@ var LocationList = React.createClass({
   render(){
 
     var self = this;
+    console.log('LOCATIONS SON ', this.props.locations)
 
     var locations = this.props.locations.map(function(l){
 
@@ -14,7 +15,7 @@ var LocationList = React.createClass({
       // Notice that we are passing the onClick callback of this
       // LocationList to each LocationItem.
 
-      return <LocationItem address={l.address} timestamp={l.timestamp} 
+      return <LocationItem address={l.location} timestamp={l.timestamp} 
           active={active} onClick={self.props.onClick} />
     });
 

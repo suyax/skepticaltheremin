@@ -92,6 +92,7 @@ router.route('/maps/:username')
     var username = req.params.username;
     var newpin = req.body;
     newpin.username = username;
+    console.log('PUT REQUEST GETS CALLED')
 
     if(JSON.stringify(newpin) !== JSON.stringify({})){  
       userController.updatePins({username: username}, newpin, function(err, pins){

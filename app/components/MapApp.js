@@ -49,6 +49,7 @@ var MapApp = React.createClass({
 
   addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
     var favorites = this.state.favorites;
+    var flag = false;
     var breadcrumb = {
       id: id,
       lat: lat,
@@ -58,15 +59,31 @@ var MapApp = React.createClass({
       address: this.state.currentAddress,
       location: location
     };
-    favorites.push(breadcrumb);
+    for(var i = 0; i<favorites.length;i++){
+      if(favorites[i].id===breadcrumb.id){
+        favorites[i] = breadcrumb;
+        console.log('EDTTED BREADCRUMB',favorites[i])
+        helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
+          console.log(data);
+        });
+        flag = true;
+      }
+      
+    }
 
+    if(!flag){
+       favorites.push(breadcrumb);
+        helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
+          console.log(data);
+        });
+    }
+
+    console.log('FAVORITES BEFORE RERENDERING' ,favorites)
     this.setState({
       favorites: favorites
     });
 
-    helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
-      console.log(data);
-    });
+   
     localStorage.favorites = JSON.stringify(favorites);
 
   },
