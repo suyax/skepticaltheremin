@@ -36,14 +36,32 @@ exports.removeUser = function(name, callback) {
 //pins controllers
 //////////////////
 
-//find pins of single user
-exports.findOne = function (query, callback) {
-  User.findOne(query, function (err, person) {
+//find all pins
+exports.getAllPins = function (callback) {
+  Pin.find({}, function (err, pins) {
     if (err) {
       callback(err);
       return;
     }
-    callback(null, person);
+    callback(null, {pins: pins});
+  });
+};
+
+//find pins of single user
+exports.findOne = function (query, callback) {
+  // User.findOne(query, function (err, person) {
+  //   if (err) {
+  //     callback(err);
+  //     return;
+  //   }
+  //   callback(null, person);
+  // });
+  Pin.find(query, function (err, pins) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null, {pins: pins});
   });
 };
 
@@ -54,13 +72,26 @@ exports.updatePins = function (query, newPin, callback) {
     return;
   } else {
     var pinToCreate = new Pin(newPin);
-    User.findOneAndUpdate(query, {$push: {pins: pinToCreate}}, function (err, doc) {
+    // User.findOneAndUpdate(query, {$push: {pins: pinToCreate}}, function (err, doc) {
+    //   if (err) {
+    //     callback(err);
+    //     return;
+    //   }
+    //   pinToCreate.save(function (err, pin) {
+    //     if (err) {
+    //       callback(err);
+    //       return;
+    //     }
+    //     callback(null, pinToCreate);
+    //   })
+    // });
+    pinToCreate.save(function (err, pin) {
       if (err) {
         callback(err);
         return;
       }
       callback(null, pinToCreate);
-    });
+    })
   }
 };
 
@@ -116,7 +147,6 @@ exports.getAll = function (callback) {
     callback(null, persons);
   });
 };
-
 
 //example pins
 // [{"lat":37.78696217255432,"lng":-122.40696430206299,"timestamp":1452391665585,"details":{"note":"I LOVE this place."},"infoWindow":{"content":"<p>Dat info dohhh</p>"}},8

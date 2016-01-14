@@ -1,7 +1,7 @@
 var React = require('react');
 
 var Search = require('./Search');
-var Map = require('./Map');
+var MapA = require('./MapA');
 var CurrentLocation = require('./CurrentLocation');
 var LocationList = require('./LocationList');
 var SearchUser = require('./SearchUser');
@@ -120,7 +120,7 @@ var MapApp = React.createClass({
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
           <Search onSearch={this.searchForAddress} />
 
-          <Map lat={this.state.mapCoordinates.lat}
+          <MapA lat={this.state.mapCoordinates.lat}
             lng={this.state.mapCoordinates.lng}
             favorites={this.state.favorites}
             onFavoriteToggle={this.toggleFavorite}

@@ -8,7 +8,9 @@ var pinSchema = new mongoose.Schema({
   lng: Number, //longatude
   details: {},
   timestamp: Date,
-  location: String
+  location: String,
+  username: String,
+  category: String
 });
 
 
