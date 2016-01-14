@@ -101,9 +101,14 @@ var Map = React.createClass({
         console.log('bready crumbies');
         $('.contextmenu').remove();
 
+        var addressMarker = '';
+        var noteMarker = '';
+
         var addressString = e.latLng.lat().toString() + " " +  e.latLng.lng().toString();
         self.props.searchAddress(addressString, function(newLocation){
           self.setState({location: newLocation, comment: "Add comments here and save breadcrumb"});
+          addressMarker = newLocation;
+          noteMarker = 'Add comments here and save breadcrumb';
         });
         var id = self.props.favorites.length;
         var time = Date.now();
@@ -125,9 +130,16 @@ var Map = React.createClass({
           }
         });
         google.maps.event.addListener(marker, 'click', function(event) {
+
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
+             var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
+            self.props.searchAddress(testString, function(newLocation){
+            
+          });
+          self.setState({location: addressMarker, comment: noteMarker});
           self.matchBreadCrumb(this.id);
+          console.log('this is what the current marker on state is set to: ', self.state.currentMarker)
         });
         self.setState({currentMarker: marker});
         self.updateCurrentLocation();
@@ -168,9 +180,17 @@ var Map = React.createClass({
           }
         });
         google.maps.event.addListener(marker, 'click', function(event) {
+          console.log(event.latLng.lat(), 'LATLONG', event.latLng.lng())
+
+           var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
+          self.props.searchAddress(testString, function(newLocation){
+          
+        });
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
           self.matchBreadCrumb(this.id);
+          console.log('Existing Marker has been clicked, current marker set to: ', self.state.currentMarker)
+
         });
 
       });
@@ -200,9 +220,17 @@ var Map = React.createClass({
   },
 
   handleSubmit(e) {
-    e.preventDefault();
     var id = this.props.favorites.length;
+   for(var i = 0;i<this.props.favorites.length; i++){
+    if(this.props.favorites[i].id === this.state.currentMarker.id){
+       id = this.state.currentMarker.id;
+    }
+
+   }
+    e.preventDefault();
+    //var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
+    console.log('BEFORE SUBMITTING, ID IS: ', this.state.currentMarker)
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
     this.setState({location: '', comment: ''});
   },

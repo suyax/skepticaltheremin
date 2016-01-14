@@ -27,6 +27,7 @@ var Map = React.createClass({
     var breadcrumbs = this.props.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
+      console.log('LOOK HERE', breadcrumb.timestamp, '+', timestamp)
       if(breadcrumb.timestamp === timestamp){
         this.setState({location: breadcrumb.location, comment: breadcrumb.details.note})
         return;
@@ -90,6 +91,7 @@ var Map = React.createClass({
           });
           var id = self.props.favorites.length;
           var time = Date.now();
+          console.log('HELLO', typeof time, time)
           self.setState({lastMarkerTimeStamp: time});
           var marker = this.addMarker({
             lat: e.latLng.lat(),
@@ -106,6 +108,7 @@ var Map = React.createClass({
             //   content: '<p style="height:200px; width: 800px;">HTML Content </p>'
             // },
             click: function(e) {
+              //console.log('new marker was clicked')
               self.setState({currentMarker: this});
               self.updateCurrentLocation();
               self.matchBreadCrumb(e.timestamp);
@@ -147,8 +150,10 @@ var Map = React.createClass({
             scale: 5
           },
           click: function(e) {
+            console.log('marker has been clicked')
             self.setState({currentMarker: this});
             self.updateCurrentLocation();
+            console.log('THIS IS TIMESTAMP: ', e.timestamp, 'ASDASD', e )
             self.matchBreadCrumb(e.timestamp);
             // self.state.currentMarker.setMap(null);
           }

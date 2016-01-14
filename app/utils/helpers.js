@@ -16,7 +16,7 @@ var getAllBreadCrumbs = function(username, cb) {
 };
 
 var addBreadCrumb = function(username, breadcrumb, cb) {
-  console.log(username);
+  console.log(username, ' ADD BREAKCRUMB HELPER CALLED');
   $.ajax({
     url: '/api/maps/' + username,
     dataType: 'json',

@@ -68,31 +68,37 @@ exports.findOne = function (query, callback) {
 //find user and add new pin to pins collection, one at a time
 //called when api/maps/:username hears a put request
 exports.updatePins = function (query, newPin, callback) {
+
   if(!newPin){
     return;
   } else {
-    var pinToCreate = new Pin(newPin);
-    // User.findOneAndUpdate(query, {$push: {pins: pinToCreate}}, function (err, doc) {
-    //   if (err) {
-    //     callback(err);
-    //     return;
-    //   }
-    //   pinToCreate.save(function (err, pin) {
-    //     if (err) {
-    //       callback(err);
-    //       return;
-    //     }
-    //     callback(null, pinToCreate);
-    //   })
-    // });
-    pinToCreate.save(function (err, pin) {
-      if (err) {
-        callback(err);
-        return;
+    console.log('NEWPINID LOOK HERE TO SEE IF EXISTS: ', newPin)
+    var tempInt = parseInt(newPin.id)
+    console.log('WHY YOU NO TURN INTO INT', tempInt)
+    Pin.findOne({id: tempInt}, function(err, pin){
+      console.log('GOING INSIDE FINDONE PIN ', pin)
+      if(pin){
+        delete newPin.id;
+        Pin.update({id: tempInt}, newPin, function(err, numAffected, rawResponse){
+          console.log(rawResponse, 'UPDATE STUFFZ', numAffected);
+          callback(null, rawResponse)
+        } )
       }
-      callback(null, pinToCreate);
+      else{
+        var pinToCreate = new Pin(newPin);
+        pinToCreate.save(function (err, pin) {
+          if (err) {
+            callback(err);
+            return;
+          }
+          console.log('NEW PIN SUCCESSFULLY CREATED')
+          callback(null, pinToCreate);
+        })
+        
+      }
     })
   }
+   
 };
 
 
