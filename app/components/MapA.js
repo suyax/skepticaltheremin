@@ -19,11 +19,11 @@ var Map = React.createClass({
       filterCategory: 'default'
     }
   },
-  
+
   handleLocationChange(e) {
-    this.setState({location: e.target.value});  
+    this.setState({location: e.target.value});
   },
-  
+
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
@@ -72,7 +72,7 @@ var Map = React.createClass({
   componentDidMount(){
 
     // Only componentDidMount is called when the component is first added to
-    // the page. This is why we are calling the following method manually. 
+    // the page. This is why we are calling the following method manually.
     // This makes sure that our map initialization code is run the first time.
 
     // this.componentDidUpdate();
@@ -87,12 +87,13 @@ var Map = React.createClass({
 
     //Right Click Menu
     google.maps.event.addListener(map, "rightclick", function(e) {
+      console.log('rightclikuuuuuu');
       $('.contextmenu').remove();
 
       var $contextMenu = $('<div class="contextmenu"></div>');
       $contextMenu.css({
-        'position': 'absolute', 
-        'left': e.pixel.x, 
+        'position': 'absolute',
+        'left': e.pixel.x,
         'top': e.pixel.y,
         'background-color': 'white',
         'border': '1px solid #cccccc',
@@ -168,7 +169,7 @@ var Map = React.createClass({
 
       $('#map').append($contextMenu);
     })
-    
+
     helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
