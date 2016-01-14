@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 var pinSchema = new mongoose.Schema({
   id: Number,
   address: String,
-  lat: Number, //latatude
-  lng: Number, //longatude
+  lat: Number, //latitude
+  lng: Number, //longitude
   details: {},
   timestamp: Date,
   location: String,

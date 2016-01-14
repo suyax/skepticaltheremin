@@ -114,14 +114,14 @@ exports.removeLastPin = function (name, callback) {
       doc.save();
     }
     callback(null, poppedPin);
-  
+
   });
 
 };
 
 
 
-//deletes a specific pin. called when api/maps/:username hears a delete reqest 
+//deletes a specific pin. called when api/maps/:username hears a delete request
 exports.deletePin = function (name, pinId, callback) {
   User.findOne(name, function (err, user) {
     console.log('trying to delete pin');
@@ -152,6 +152,6 @@ exports.getAll = function (callback) {
 // [{"lat":37.78696217255432,"lng":-122.40696430206299,"timestamp":1452391665585,"details":{"note":"I LOVE this place."},"infoWindow":{"content":"<p>Dat info dohhh</p>"}},8
 
 // {"lat":37.7865043039168,"lng":-122.40644931793213,"timestamp":1452391678701,"details":{"note":"I meh this place."},"infoWindow":{"content":"<p>llllalala</p>"}},
- 
+
 
 // {"lat":37.78613123179135,"lng":-122.40491509437561,"timestamp":1452394116848,"details":{"note":"I hate this place."},"infoWindow":{"content":"<p>skip skip</p>"}}]

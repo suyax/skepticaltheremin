@@ -1,8 +1,9 @@
-/*.container {
+.container {
   max-width: 980px;
   text-align: center;
   margin: 20px auto;
-}*/
+  color: #337ab7;
+}
 
 h1 {
   margin-bottom: 20px;
@@ -41,7 +42,7 @@ h1 {
   line-height: 1.4;
 }
 
-.current-location .glyphicon-star, 
+.current-location .glyphicon-star,
 .current-location .glyphicon-star-empty {
   display: inline-block;
   margin-left: 10px;
@@ -118,6 +119,7 @@ textarea {
   resize: vertical;
 }
 
-body { 
-    padding-top: 65px; 
+body {
+    padding-top: 65px;
+    background-color: #ffffe5;
 }
