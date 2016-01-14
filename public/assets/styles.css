@@ -1,45 +1,74 @@
-.container {
-  max-width: 980px;
-  text-align: center;
-  margin: 20px auto;
-  color: #337ab7;
+body {
+    padding-top: 65px;
+    color: #93C4D3;
 }
 
 h1 {
   margin-bottom: 20px;
+  margin-left: 12px;
 }
 
-#geocoding_form {
-  margin: 40px auto 60px;
+textarea {
+  resize: vertical;
 }
 
-#address {
-  border-radius: 3px;
+form-control {
+  height: 100%;
+  border: 1px;
+  padding: 12px;
+}
+
+.styled-select select {
+  background: transparent;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 1;
+  margin-left: 10px;
+
+  }
+
+input {
+  width: 100%
+}
+
+label {
+  font-size: larger;
+  margin-right: 10px;
+}
+
+.container {
+  text-align: center;
+}
+.navbar-inverse  {
+  background-color: #93C4D3;
+  border-color: #93C4D3;
+}
+
+.navbar-inverse .navbar-brand {
+  color: white;
 }
 
 .input-group {
   margin-left: 4%;
 }
 
+.input-group-btn {
+  vertical-align: bottom;
+}
+
 .glyphicon {
-  font-size: 18px;
+  font-size: 32px;
   z-index: 20;
   cursor: pointer;
 }
 
 .glyphicon-search{
   position: relative;
-  right: 30px;
 }
 
 .current-location {
   margin-top: 30px;
-}
-
-#save-location {
-  display: inline;
-  margin: 10px auto;
-  line-height: 1.4;
 }
 
 .current-location .glyphicon-star,
@@ -58,12 +87,18 @@ h1 {
 }
 
 .map-holder {
-  max-width: 500px;
+  max-width: 100%;
   height: 350px;
   margin: 0 auto;
   background-color: #FCFCFC;
   position: relative;
   border-radius: 2px;
+}
+
+div .map-holder {
+  padding-right: 15px;
+  padding-left: 15px;
+
 }
 
 .map-holder p {
@@ -77,10 +112,10 @@ h1 {
   color: #969FA8;
 }
 
-#map {
-  max-width: 500px;
-  height: 350px;
-  margin: 0 auto;
+.btn-primary {
+  margin-top: 10px;
+  background-color: #93C4D3;
+  border-color: #93C4D3;
 }
 
 .list-group {
@@ -115,11 +150,33 @@ a.list-group-item span.createdAt {
   z-index: -1;
 }
 
-textarea {
-  resize: vertical;
+.navbar-inverse .navbar-brand:hover {
+  color: #2E6DA4;
+
 }
 
-body {
-    padding-top: 65px;
-    background-color: #ffffe5;
+#save-location {
+  display: inline;
+  margin: 10px auto;
+  line-height: 1.4;
+}
+
+#geocoding_form {
+  margin: 20px auto 20px;
+}
+
+#address {
+  border-radius: 3px;
+}
+
+#map {
+  max-width: 100%;
+  height: 400px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding-top: 85px;
+  }
 }
