@@ -12,7 +12,8 @@ var Map = React.createClass({
       previousMarker: null,
       currentMarker: null,
       lastMarkerTimeStamp: null,
-      map: null
+      map: null,
+      heatmap: null
     }
   },
 
@@ -77,51 +78,71 @@ var Map = React.createClass({
       center: {lat: this.props.lat, lng: this.props.lng},
       mapTypeId: google.maps.MapTypeId.SATELLITE
     });
+    console.log("map, ", map)
     // var heatmap = new google.maps.visualization.HeatmapLayer({
-    //   data: getPoints(),
-    //   map: map,
+    //   data: [],
+    //   map: null,
     //   radius: 50
     // });
-    var heatmap;
-    console.log(heatmap);
     function makeHeat(){
-      if(heatmap){
-        heatmap=null;
-        console.log("null");
-      } else {
-        heatmap = new google.maps.visualization.HeatmapLayer({
-          data: getPoints(),
-          map: map,
-          radius: 50
-        });
-        console.log("made on heat map");
-      }
-      console.log("it is getting hot in here");
+      // console.log("heatmap.getmap() ", heatmap.getMap())
+      // if(heatmap.getMap()){
+        // heatmap.setMap(null);
+
+      // } else {
+        // heatmap.set('data', getPoints());
+        // heatmap.setMap(map);
+        // getPoints(heatmap, map)
+      // }
     }
-    makeHeat();
+    // makeHeat();
+    // function toggleHeatmap() {
+    //   heatmap.setMap(heatmap.getMap() ? null : map);
+    // }
     //setTimeout(makeHeat, 3000);
     //heatmap.setMap(map);
     this.setState({map: map});
-    // console.log("=====================");
+
     // var dataPoint =
     // helpers.getAllBreadCrumbs("ian", function(data){
-    //   console.log('this is our data ',data.pins[0].lat, data.pins[0].lng);
     // });
-    //console.log(x);
 
-    function getPoints() {
+
+    function getPoints(map) {
       var results = [];
       helpers.getAllBreadCrumbs("ian", function(data){
-        for (var i=0; i<data.pins.length; i++){
-          results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng ));
+
+        if (self.state.heatmap) {
+          self.state.heatmap.set('map', null);
+          self.state.heatmap = null;
+
+        }
+        else {
+          for (var i=0; i<data.pins.length; i++){
+            results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng ));
+          }
+
+          self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+            data: results,
+            map: map,
+            radius: 50
+          });
+
+          // console.log('heatmap data', heatmap.get('data'))
+          // console.log('heatmap map', heatmap.get('map'))
+          return results;
         }
       })
-      return results;
     }
 
     //Right Click Menu
     google.maps.event.addListener(map, "rightclick", function(e) {
       console.log('rightclikuuuuuu');
+      getPoints(self.state.map);
+      //heatmap.set("data", getPoints());
+
+
+      //toggleHeatmap();
       $('.contextmenu').remove();
 
       var $contextMenu = $('<div class="contextmenu"></div>');
@@ -139,7 +160,6 @@ var Map = React.createClass({
       var $closemenu = $('<div class="closemenu">Close Menu</div>')
 
       $createbreadcrumb.on('click', function() {
-        console.log('bready crumbies');
         $('.contextmenu').remove();
 
         var addressMarker = '';
@@ -180,14 +200,12 @@ var Map = React.createClass({
           });
           self.setState({location: addressMarker, comment: noteMarker});
           self.matchBreadCrumb(this.id);
-          console.log('this is what the current marker on state is set to: ', self.state.currentMarker)
         });
         self.setState({currentMarker: marker});
         self.updateCurrentLocation();
       });
 
       $centerhere.on('click', function() {
-        console.log('ayeeeeee');
         $('.contextmenu').remove();
       });
 
@@ -221,7 +239,6 @@ var Map = React.createClass({
           }
         });
         google.maps.event.addListener(marker, 'click', function(event) {
-          console.log(event.latLng.lat(), 'LATLONG', event.latLng.lng())
 
            var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
           self.props.searchAddress(testString, function(newLocation){
@@ -230,7 +247,6 @@ var Map = React.createClass({
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
           self.matchBreadCrumb(this.id);
-          console.log('Existing Marker has been clicked, current marker set to: ', self.state.currentMarker)
 
         });
 
@@ -273,7 +289,6 @@ var Map = React.createClass({
     e.preventDefault();
     //var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
-    console.log('BEFORE SUBMITTING, ID IS: ', this.state.currentMarker)
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
     this.setState({location: '', comment: ''});
   },
@@ -301,5 +316,4 @@ var Map = React.createClass({
   }
 
 });
-console.log("this is", this);
 module.exports = Map;
