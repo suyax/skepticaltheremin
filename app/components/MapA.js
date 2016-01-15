@@ -1,4 +1,3 @@
-
 var React = require('react');
 var helpers = require('../utils/helpers');
 
@@ -78,35 +77,8 @@ var Map = React.createClass({
       center: {lat: this.props.lat, lng: this.props.lng},
       mapTypeId: google.maps.MapTypeId.SATELLITE
     });
-    console.log("map, ", map)
-    // var heatmap = new google.maps.visualization.HeatmapLayer({
-    //   data: [],
-    //   map: null,
-    //   radius: 50
-    // });
-    function makeHeat(){
-      // console.log("heatmap.getmap() ", heatmap.getMap())
-      // if(heatmap.getMap()){
-        // heatmap.setMap(null);
 
-      // } else {
-        // heatmap.set('data', getPoints());
-        // heatmap.setMap(map);
-        // getPoints(heatmap, map)
-      // }
-    }
-    // makeHeat();
-    // function toggleHeatmap() {
-    //   heatmap.setMap(heatmap.getMap() ? null : map);
-    // }
-    //setTimeout(makeHeat, 3000);
-    //heatmap.setMap(map);
     this.setState({map: map});
-
-    // var dataPoint =
-    // helpers.getAllBreadCrumbs("ian", function(data){
-    // });
-
 
     function getPoints(map) {
       var results = [];
@@ -128,8 +100,6 @@ var Map = React.createClass({
             radius: 50
           });
 
-          // console.log('heatmap data', heatmap.get('data'))
-          // console.log('heatmap map', heatmap.get('map'))
           return results;
         }
       })
@@ -137,12 +107,7 @@ var Map = React.createClass({
 
     //Right Click Menu
     google.maps.event.addListener(map, "rightclick", function(e) {
-      console.log('rightclikuuuuuu');
       getPoints(self.state.map);
-      //heatmap.set("data", getPoints());
-
-
-      //toggleHeatmap();
       $('.contextmenu').remove();
 
       var $contextMenu = $('<div class="contextmenu"></div>');
@@ -258,36 +223,30 @@ var Map = React.createClass({
 
 
   componentDidUpdate(){
-    // if(this.props.favorites.length !== this.state.breadcrumbs.length){
-    //   this.setState({breadcrumbs: this.props.favorites});
-    //   return;
-    // }
-    // if(this.lastLat == this.props.center.lat && this.lastLng == this.props.center.lng){
+    // filtering map markers
+    var self = this;
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(this.state.map);
+    }
 
-    //   // The map has already been initialized at this address.
-    //   // Return from this method so that we don't reinitialize it
-    //   // (and cause it to flicker).
-
-    //   return;
-    // }
-
-    // this.state.map.setCenter(this.props.center.lat, this.props.center.lng);
-    // this.lastLat = this.props.center.lat;
-    // this.lastLng = this.props.center.lng
-
-
+    for (var i = 0; i < markers.length; i++) {
+      var temp = this.props.favorites.filter(function(favorite) {
+        return favorite.id === markers[i].id;
+      })
+      if (temp.length === 0) {
+        markers[i].setMap(null);
+      }
+    }
   },
 
   handleSubmit(e) {
     var id = this.props.favorites.length;
-   for(var i = 0;i<this.props.favorites.length; i++){
-    if(this.props.favorites[i].id === this.state.currentMarker.id){
-       id = this.state.currentMarker.id;
+    for(var i = 0;i<this.props.favorites.length; i++){
+      if(this.props.favorites[i].id === this.state.currentMarker.id){
+        id = this.state.currentMarker.id;
+      }
     }
-
-   }
     e.preventDefault();
-    //var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
     this.setState({location: '', comment: ''});
