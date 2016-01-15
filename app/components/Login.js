@@ -19,6 +19,11 @@ var Login = React.createClass({
     var self = this;
     this.props.loginUser(this.state.username, this.state.password);
   },
+  change: function(e){
+    console.log("changed!!!!!!!!!!")
+    e.preventDefault();
+    this.props.changeFunction(true);
+  },
 
   render: function(){
     return(
@@ -38,7 +43,7 @@ var Login = React.createClass({
            </div>
        </form>
        <p>
-         <a href="#signup">Sign up for an account &rarr;</a>
+         <a onClick={this.change}>Sign up for an account &rarr;</a>
        </p>
       </div>
 
