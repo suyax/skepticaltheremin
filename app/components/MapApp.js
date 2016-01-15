@@ -7,7 +7,7 @@ var LocationList = require('./LocationList');
 var SearchUser = require('./SearchUser');
 var helpers = require('../utils/helpers');
 var Signup = require('./Signup');
-
+var Login = require('./Login');
 
 var MapApp = React.createClass({
 
@@ -34,15 +34,22 @@ var MapApp = React.createClass({
     };
   },
 
-  loginUser(username){
-    console.log("logged in:", username);
-    this.setState({user: username, loggedin: true});
-    helpers.getAllBreadCrumbs(username, function(data){
-      if(data){
-        this.setState({favorites: data.pins});
+  loginUser(username, password){
+    var self = this;
+    console.log("login user works @@@@@@@@@@@@@@")
+    helpers.checkUser(username, password, function(user) {
+      console.log(user);
+      if (user) {
+        console.log("logged in:", username);
+        self.setState({user: username, loggedin: true});
+        localStorage.setItem('username', self.state.user);
+        helpers.getAllBreadCrumbs(username, function(data){
+          if(data){
+            self.setState({favorites: data.pins});
+          }
+        }.bind(this));
       }
-    }.bind(this));
-
+    })
   },
 
   componentDidMount(){
@@ -176,7 +183,7 @@ var MapApp = React.createClass({
 
       );
     } else {
-      return <Signup loginUser={this.loginUser}/>
+      return <Login loginUser={this.loginUser}/>
     }
   }
 

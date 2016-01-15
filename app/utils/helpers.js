@@ -71,6 +71,32 @@ var signupUser = function(username, password, cb){
   });
 };
 
+var checkUser = function(username, password, cb){
+  console.log(username, password);
+  var user = {
+    username: username,
+    password: password
+  };
+  $.ajax({
+    url: '/api/usersCheck',
+    type: 'POST',
+    data: user,
+    dataType: 'json',
+    success: function(data){
+      console.log("1111111!!!!!!!!!!!!!!!!", data);
+      window.location.href = "#map";
+      if(cb){
+        cb(data);
+      }
+    },
+    error: function(xhr, status, err) {
+      cb();
+      console.log(xhr.toString(), status.toString(), err.toString());
+      // console.log(status, err.toString());
+    }
+  });
+};
+
 var login = function(username, password, cb){
   console.log(username,password);
   var user = {
@@ -102,7 +128,8 @@ var helpers = {
   getAllBreadCrumbs: getAllBreadCrumbs,
   addBreadCrumb: addBreadCrumb,
   signupUser: signupUser,
-  login: login
+  login: login,
+  checkUser: checkUser
 }
 
 module.exports = helpers;

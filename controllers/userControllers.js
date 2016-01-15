@@ -32,6 +32,19 @@ exports.removeUser = function(name, callback) {
   });
 }
 
+//check a user to see when it logged in or not
+exports.checkUser = function(name, callback) {
+  User.findOne({username: name.username, password: name.password }, function(err, user){
+    console.log('GOING INSIDE CHECKUSER', user);
+    if(user){
+      callback(null, user);
+    }
+    else{
+      callback(null, null);
+    }
+  });
+}
+
 //////////////////
 //pins controllers
 //////////////////
@@ -94,18 +107,16 @@ exports.updatePins = function (query, newPin, callback) {
           console.log('NEW PIN SUCCESSFULLY CREATED')
           callback(null, pinToCreate);
         })
-        
+
       }
     })
   }
-   
+
 };
 
 
 //remove last pin: only used in testing
 exports.removeLastPin = function (name, callback) {
-
-
   User.findOne(query, function (err, doc) {
     console.log('remove from database')
     if (err) {
@@ -122,7 +133,6 @@ exports.removeLastPin = function (name, callback) {
     callback(null, poppedPin);
 
   });
-
 };
 
 

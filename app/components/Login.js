@@ -3,7 +3,6 @@ var helpers = require('../utils/helpers');
 
 var Login = React.createClass({
   getInitialState: function() {
-    localStorage.removeItem('username');
     return {
       username: '',
       password: '',
@@ -18,10 +17,7 @@ var Login = React.createClass({
   login: function(e){
     e.preventDefault();
     var self = this;
-    localStorage.setItem('username', this.state.username);
-    console.log("Login called:", this.state.username, this.state.password);
-    helpers.login(this.state.username,this.state.password);
-    this.props.loginUser(this.state.username);
+    this.props.loginUser(this.state.username, this.state.password);
   },
 
   render: function(){
@@ -42,7 +38,7 @@ var Login = React.createClass({
            </div>
        </form>
        <p>
-         <a href="#login">Login to your account &rarr;</a>
+         <a href="#signup">Sign up for an account &rarr;</a>
        </p>
       </div>
 

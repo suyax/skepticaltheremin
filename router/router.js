@@ -11,7 +11,7 @@ var userController = require('../controllers/userControllers.js');
 console.log('using router...')
 
 //////////////////
-//users 
+//users
 //////////////////
 
 //get all users. not usually useful
@@ -57,6 +57,31 @@ router.route('/users')
     });
   });
 
+//check user
+router.route('/usersCheck')
+  .post(function (req, res) {
+    //example:
+    console.log("post to usersCheck", req.body.username,req.body.password);
+    var newuser = {
+      username: req.body.username,
+      password: req.body.password,
+      pins: []
+    }
+
+    userController.checkUser(newuser, function(err, pins){
+       if (err) {
+        console.log(err);
+        return res.json({err: err});
+      }
+      if (pins) {
+        console.log(201);
+        res.status(201).json(pins);
+      } else {
+        console.log(404);
+        res.status(404).json({});
+      }
+    });
+  });
 //////////////////
 //pins
 //////////////////
@@ -94,7 +119,7 @@ router.route('/maps/:username')
     newpin.username = username;
     console.log('PUT REQUEST GETS CALLED')
 
-    if(JSON.stringify(newpin) !== JSON.stringify({})){  
+    if(JSON.stringify(newpin) !== JSON.stringify({})){
       userController.updatePins({username: username}, newpin, function(err, pins){
         if (err) {
           return res.json({err: err});
@@ -133,7 +158,5 @@ router.route('/maps/:username')
       res.json(doc);
     });
   });
-
-
 
 module.exports = router;
