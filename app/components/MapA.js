@@ -1,3 +1,4 @@
+
 var React = require('react');
 var helpers = require('../utils/helpers');
 var markers = [];
@@ -80,10 +81,31 @@ var Map = React.createClass({
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: {lat: this.props.lat, lng: this.props.lng},
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.SATELLITE
     });
-
+    var heatmap = new google.maps.visualization.HeatmapLayer({
+      data: getPoints(),
+      map: map,
+      radius: 50
+    });
     this.setState({map: map});
+    // console.log("=====================");
+    // var dataPoint =
+    // helpers.getAllBreadCrumbs("ian", function(data){
+    //   console.log('this is our data ',data.pins[0].lat, data.pins[0].lng);
+    // });
+    //console.log(x);
+
+    function getPoints() {
+      var results = [];
+      helpers.getAllBreadCrumbs("ian", function(data){
+        for (var i=0; i<data.pins.length; i++){
+          results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng ));
+        }
+      })
+
+      return results;
+    }
 
     //Right Click Menu
     google.maps.event.addListener(map, "rightclick", function(e) {
@@ -95,7 +117,7 @@ var Map = React.createClass({
         'position': 'absolute',
         'left': e.pixel.x,
         'top': e.pixel.y,
-        'background-color': 'white',
+        'background-color': 'yellow',
         'border': '1px solid #cccccc',
         'padding': '2px 5px'
       });
@@ -144,7 +166,7 @@ var Map = React.createClass({
           self.updateCurrentLocation();
              var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
             self.props.searchAddress(testString, function(newLocation){
-            
+
           });
           self.setState({location: addressMarker, comment: noteMarker});
           self.matchBreadCrumb(this.id);
@@ -198,7 +220,7 @@ var Map = React.createClass({
 
            var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
           self.props.searchAddress(testString, function(newLocation){
-          
+
         });
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
