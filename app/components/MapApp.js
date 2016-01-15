@@ -47,7 +47,7 @@ var MapApp = React.createClass({
   componentDidMount(){
   },
 
-  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location) {
+  addToFavBreadCrumbs(id, lat, lng, timestamp, details, location, category) {
     var favorites = this.state.favorites;
     var flag = false;
     var breadcrumb = {
@@ -57,7 +57,8 @@ var MapApp = React.createClass({
       timestamp: timestamp,
       details: details,
       address: this.state.currentAddress,
-      location: location
+      location: location,
+      category: category
     };
     for(var i = 0; i<favorites.length;i++){
       if(favorites[i].id===breadcrumb.id){
@@ -129,13 +130,29 @@ var MapApp = React.createClass({
 
   },
 
+  filterResults(e){
+    var faves;
+    helpers.getAllBreadCrumbs(this.state.user, function(data){
+      if(data){
+        faves = data.pins;
+        if (e.target.value !== 'default') {
+          faves = faves.filter(function(d) {
+            return d.category === e.target.value;
+          })
+        }
+        console.log('FAVES: ', faves);
+        this.setState({favorites: faves});
+      }
+    }.bind(this));
+  },
+
   render(){
     if(this.state.loggedin){
       return (
 
         <div>
           <h1 className="col-xs-12 col-md-6 col-md-offset-3">My Breadcrumbs</h1>
-          <Search onSearch={this.searchForAddress} />
+          <Search onSearch={this.searchForAddress} onFilter={this.filterResults} />
 
           <MapA lat={this.state.mapCoordinates.lat}
             lng={this.state.mapCoordinates.lng}

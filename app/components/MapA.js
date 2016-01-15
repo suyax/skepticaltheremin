@@ -1,7 +1,9 @@
 var React = require('react');
 var helpers = require('../utils/helpers');
+var markers = [];
 
 var Map = React.createClass({
+
   getInitialState(){
     return {
       location: '',
@@ -11,7 +13,10 @@ var Map = React.createClass({
       previousMarker: null,
       currentMarker: null,
       lastMarkerTimeStamp: null,
-      map: null
+      map: null,
+      category: "default",
+      markers: [],
+      filterCategory: 'default'
     }
   },
   
@@ -23,17 +28,18 @@ var Map = React.createClass({
     this.setState({comment: e.target.value});
   },
 
+  handleCategoryChange(e) {
+    this.setState({category: e.target.value});
+  },
+
   matchBreadCrumb(id){
     var breadcrumbs = this.props.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
-      console.log('breadcrumb id: ', breadcrumb.id)
-      console.log('id: ', id)
+      console.log('breadcrumb: ', breadcrumb)
       if(breadcrumb.id === id){
         console.log('match breadcrumb state is set!')
-        console.log(breadcrumb.location, breadcrumb.details.note)
-        this.setState({location: breadcrumb.location, comment: breadcrumb.details.note})
-        console.log(this.state);
+        this.setState({location: breadcrumb.location, comment: breadcrumb.details.note, category: breadcrumb.category})
         return;
       }
     }
@@ -129,6 +135,8 @@ var Map = React.createClass({
             scale: 5
           }
         });
+        // self.setState({markers: self.state.markers.concat(marker)});
+        markers.push(marker);
         google.maps.event.addListener(marker, 'click', function(event) {
 
           self.setState({currentMarker: this});
@@ -179,6 +187,11 @@ var Map = React.createClass({
             scale: 5
           }
         });
+        // self.setState({markers: self.state.markers.concat(marker)});
+        console.log(markers)
+        console.log(marker)
+        markers.push(marker);
+        console.log(markers);
         google.maps.event.addListener(marker, 'click', function(event) {
           console.log(event.latLng.lat(), 'LATLONG', event.latLng.lng())
 
@@ -198,30 +211,50 @@ var Map = React.createClass({
 
   },
 
-  componentDidUpdate(){
-    // if(this.props.favorites.length !== this.state.breadcrumbs.length){
-    //   this.setState({breadcrumbs: this.props.favorites});
-    //   return;
-    // }
-    // if(this.lastLat == this.props.center.lat && this.lastLng == this.props.center.lng){
+  // componentDidUpdate(){
+  //   if(this.props.favorites.length !== this.state.breadcrumbs.length){
+  //     this.setState({breadcrumbs: this.props.favorites});
+  //     return;
+  //   }
+  //   if(this.lastLat == this.props.center.lat && this.lastLng == this.props.center.lng){
 
-    //   // The map has already been initialized at this address.
-    //   // Return from this method so that we don't reinitialize it
-    //   // (and cause it to flicker).
+  //     // The map has already been initialized at this address.
+  //     // Return from this method so that we don't reinitialize it
+  //     // (and cause it to flicker).
 
-    //   return;
-    // }
+  //     return;
+  //   }
 
-    // this.state.map.setCenter(this.props.center.lat, this.props.center.lng);
-    // this.lastLat = this.props.center.lat;
-    // this.lastLng = this.props.center.lng
+  //   this.state.map.setCenter(this.props.center.lat, this.props.center.lng);
+  //   this.lastLat = this.props.center.lat;
+  //   this.lastLng = this.props.center.lng
+  // },
 
+  componentDidUpdate() {
+    // filtering map markers
+    var self = this;
+    console.log('component received props!');
+    // console.log('markers:' ,this.state.markers);
+    // console.log('markers:' ,markers);
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(this.state.map);
+    }
+
+    for (var i = 0; i < markers.length; i++) {
+      var temp = this.props.favorites.filter(function(favorite) {
+        return favorite.id === markers[i].id;
+      })
+      console.log('temp: ', temp);
+      if (temp.length === 0) {
+        markers[i].setMap(null);
+      }
+    }
 
   },
 
   handleSubmit(e) {
     var id = this.props.favorites.length;
-   for(var i = 0;i<this.props.favorites.length; i++){
+    for(var i = 0;i<this.props.favorites.length; i++){
     if(this.props.favorites[i].id === this.state.currentMarker.id){
        id = this.state.currentMarker.id;
     }
@@ -231,7 +264,7 @@ var Map = React.createClass({
     //var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
     console.log('BEFORE SUBMITTING, ID IS: ', this.state.currentMarker)
-    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
+    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     this.setState({location: '', comment: ''});
   },
 
@@ -249,6 +282,16 @@ var Map = React.createClass({
         <input type="text" className="form-control" id="location" value={this.state.location} onChange={this.handleLocationChange} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
         <textarea className="form-control" rows="10" id="comment" value={this.state.comment} onChange={this.handleCommentChange}></textarea>
+        <label htmlFor="category">Category:</label>
+        <select id="category" value={this.state.category} onChange={this.handleCategoryChange}>
+          <option value="default">-- Choose a category --</option>
+          <option value="Assault">Assault</option>
+          <option value="Theft/Larceny">Theft/Larceny</option>
+          <option value="Burglary">Burglary</option>
+          <option value="Vandalism">Vandalism</option>
+          <option value="Drugs/Alcohol Violations">Drugs/Alcohol Violations</option>
+          <option value="Motor Vehicle Theft">Motor Vehicle Theft</option>
+        </select>
         <div>
           <input type="submit" className="btn btn-primary" value="Save Breadcrumb" />
         </div>

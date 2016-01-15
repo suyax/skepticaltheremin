@@ -32,12 +32,13 @@ var Search = React.createClass({
             <div className="input-group">
               <div className="styled-select">
               <label>Crime Categories</label>
-                <select>
+                <select onChange={this.props.onFilter}>
+                    <option value="default">Choose a filter</option>
                     <option value="Assault">Assault</option>
                     <option value="Theft/Larceny">Theft/Larceny</option>
                     <option value="Burglary">Burglary</option>
                     <option value="Vandalism">Vandalism</option>
-                    <option value="Drugs/alcohol Violations">Drugs/alcohol Violations</option>
+                    <option value="Drugs/Alcohol Violations">Drugs/Alcohol Violations</option>
                     <option value="Motor Vehicle Theft">Motor Vehicle Theft</option>
                 </select>
               </div>
