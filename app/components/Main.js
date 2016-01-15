@@ -1,15 +1,10 @@
 var React = require('react');
+var Router = require('react-router');
 var connect = require('react-redux').connect;
 var routeActions = require('redux-simple-router').routeActions;
 
 
 var Main = React.createClass({
-
-  clearStorage: function(){
-    localStorage.removeItem('username');
-    console.log("clearStorage");
-
-  },
   render: function(){
     return (
       <div className="main-container">
@@ -17,9 +12,7 @@ var Main = React.createClass({
           <div className="col-sm-7 col-sm-offset-2" style={{marginTop: 15}}>
             <div className="container">
               <div className="navbar-header"><a href="#map" className="navbar-brand" > Breadcrumbs </a></div>
-              <div className="navbar-header"><a href="#map" className="navbar-brand"> Login </a></div>
-              <div className="navbar-header"><a onClick={this.clearStorage} className="navbar-brand">Logout </a></div>
-              <div className="navbar-header"><a href="#signup" className="navbar-brand">Signup </a></div>
+              <div className="navbar-header"><a href="#Logout" className="navbar-brand">Logout </a></div>
             </div>
           </div>
         </nav>

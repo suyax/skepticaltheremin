@@ -12,11 +12,6 @@ var combineReducers = require('redux').combineReducers;
 //var syncHistory = require('redux-simple-router').syncHistory;
 var routeReducer = require('redux-simple-router').routeReducer;
 
-
-
-
-
-
 var reducers = require('./reducers');
 //var middleware = syncHistory(browserHistory);
 

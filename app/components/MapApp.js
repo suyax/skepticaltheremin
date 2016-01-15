@@ -20,6 +20,7 @@ var MapApp = React.createClass({
     return {
       user: localStorage.getItem('username')||'',
       loggedin: localStorage.getItem('username') || false,
+      signedupflag: false,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
@@ -46,6 +47,7 @@ var MapApp = React.createClass({
         helpers.getAllBreadCrumbs(username, function(data){
           if(data){
             self.setState({favorites: data.pins});
+            self.setState({signedupflag: false});
           }
         }.bind(this));
       }
@@ -96,6 +98,11 @@ var MapApp = React.createClass({
 
     localStorage.favorites = JSON.stringify(favorites);
 
+  },
+
+  changeSignedUpFlag(flag){
+    console.log('changeSignedUpFlag!!!!!!!!')
+    this.setState({signedupflag:flag})
   },
 
   searchForAddress(address, cb, recenter){
@@ -156,7 +163,7 @@ var MapApp = React.createClass({
   },
 
   render(){
-    if(this.state.loggedin){
+    if(this.state.loggedin && !this.state.signedupflag){
       return (
 
         <div>
@@ -182,8 +189,12 @@ var MapApp = React.createClass({
         </div>
 
       );
+    } else if (!this.state.loggedin && !this.state.signedupflag) {
+      console.log("go in to else if")
+      return <Login loginUser={this.loginUser} changeFunction={this.changeSignedUpFlag}/>
     } else {
-      return <Login loginUser={this.loginUser}/>
+      console.log("go in to else")
+      return <Signup loginUser={this.loginUser} changeFunction={this.changeSignedUpFlag}/>
     }
   }
 
