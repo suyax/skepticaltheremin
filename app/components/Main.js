@@ -11,6 +11,7 @@ var Main = React.createClass({
             <div className="container">
               <div className="navbar-header"><a href="#map" className="navbar-brand" > Breadcrumbs </a></div>
               <div className="navbar-header"><a href="#login" className="navbar-brand"> Login </a></div>
+              <div className="navbar-header"><a href="#logout" className="navbar-brand">Logout </a></div>
               <div className="navbar-header"><a href="#signup" className="navbar-brand">Signup </a></div>
             </div>
           </div>
