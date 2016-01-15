@@ -18,8 +18,8 @@ var MapApp = React.createClass({
     var favorites = [];
 
     return {
-      user: '',
-      loggedin: false,
+      user: localStorage.getItem('username')||'',
+      loggedin: localStorage.getItem('username') || false,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
@@ -36,7 +36,7 @@ var MapApp = React.createClass({
 
   loginUser(username){
     console.log("logged in:", username);
-    this.setState({user: username, loggedin: true}); 
+    this.setState({user: username, loggedin: true});
     helpers.getAllBreadCrumbs(username, function(data){
       if(data){
         this.setState({favorites: data.pins});
@@ -71,7 +71,7 @@ var MapApp = React.createClass({
         });
         flag = true;
       }
-      
+
     }
 
     if(!flag){
@@ -86,7 +86,7 @@ var MapApp = React.createClass({
       favorites: favorites
     });
 
-   
+
     localStorage.favorites = JSON.stringify(favorites);
 
   },
@@ -124,7 +124,7 @@ var MapApp = React.createClass({
         }
 
         if(cb){
-          cb(results[0].formatted_address); 
+          cb(results[0].formatted_address);
         }
 
       }
@@ -162,14 +162,14 @@ var MapApp = React.createClass({
             onFavoriteToggle={this.toggleFavorite}
             onAddToFavBcs={this.addToFavBreadCrumbs}
             searchAddress={this.searchForAddress}
-            address={this.state.currentAddress} 
-            center={this.state.center} 
+            address={this.state.currentAddress}
+            center={this.state.center}
             loginUser={this.loginUser}
             user={this.state.user} 
             filterCategory={this.state.filterCategory} />
 
           <LocationList locations={this.state.favorites}
-            activeLocationAddress={this.state.currentAddress} 
+            activeLocationAddress={this.state.currentAddress}
             onClick={this.searchForAddress} />
 
         </div>
