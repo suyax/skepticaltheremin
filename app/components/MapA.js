@@ -1,5 +1,6 @@
 var React = require('react');
 var helpers = require('../utils/helpers');
+var markers = [];
 
 var Map = React.createClass({
   getInitialState(){
@@ -12,7 +13,9 @@ var Map = React.createClass({
       currentMarker: null,
       lastMarkerTimeStamp: null,
       map: null,
-      heatmap: null
+      category: 'default',
+      filterCategory: 'default',
+      heatmap: null,
     }
   },
 
@@ -24,17 +27,16 @@ var Map = React.createClass({
     this.setState({comment: e.target.value});
   },
 
+  handleCategoryChange(e) {
+    this.setState({category: e.target.value});
+  },
+
   matchBreadCrumb(id){
     var breadcrumbs = this.props.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
-      console.log('breadcrumb id: ', breadcrumb.id)
-      console.log('id: ', id)
       if(breadcrumb.id === id){
-        console.log('match breadcrumb state is set!')
-        console.log(breadcrumb.location, breadcrumb.details.note)
-        this.setState({location: breadcrumb.location, comment: breadcrumb.details.note})
-        console.log(this.state);
+        this.setState({location: breadcrumb.location, comment: breadcrumb.details.note, category: breadcrumb.category})
         return;
       }
     }
@@ -82,27 +84,43 @@ var Map = React.createClass({
 
     function getPoints(map) {
       var results = [];
-      helpers.getAllBreadCrumbs("ian", function(data){
+      console.log("getPoints(), self.props.favorites", self.props.favorites)
+      // helpers.getAllBreadCrumbs(self.props.user, function(data){
 
-        if (self.state.heatmap) {
-          self.state.heatmap.set('map', null);
-          self.state.heatmap = null;
+      //   if (self.state.heatmap) {
+      //     self.state.heatmap.set('map', null);
+      //     self.state.heatmap = null;
 
+      //   }
+      //   else {
+      //     for (var i=0; i<data.pins.length; i++){
+      //       results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng ));
+      //     }
+
+      //     self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+      //       data: results,
+      //       map: map,
+      //       radius: 50
+      //     });
+
+      //     return results;
+      //   }
+      // })
+      if (self.state.heatmap) {
+        self.state.heatmap.set('map', null);
+        self.state.heatmap = null;
+      }
+      else {
+        for (var i = 0; i < self.props.favorites.length; i++) {
+          results.push(new google.maps.LatLng(self.props.favorites[i].lat, self.props.favorites[i].lng));
         }
-        else {
-          for (var i=0; i<data.pins.length; i++){
-            results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng ));
-          }
-
-          self.state.heatmap = new google.maps.visualization.HeatmapLayer({
-            data: results,
-            map: map,
-            radius: 50
-          });
-
-          return results;
-        }
-      })
+        self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+          data: results,
+          map: map,
+          radius: 50
+        })
+        return results;
+      }
     }
 
     //Right Click Menu
@@ -155,11 +173,13 @@ var Map = React.createClass({
             scale: 5
           }
         });
+        markers.push(marker);
+        console.log('createbreadcrumb, markers ', markers)
         google.maps.event.addListener(marker, 'click', function(event) {
 
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
-             var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
+            var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
             self.props.searchAddress(testString, function(newLocation){
 
           });
@@ -203,12 +223,13 @@ var Map = React.createClass({
             scale: 5
           }
         });
+        markers.push(marker);
         google.maps.event.addListener(marker, 'click', function(event) {
 
-           var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
+          var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
           self.props.searchAddress(testString, function(newLocation){
 
-        });
+          });
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
           self.matchBreadCrumb(this.id);
@@ -219,8 +240,6 @@ var Map = React.createClass({
     });
 
   },
-
-
 
   componentDidUpdate(){
     // filtering map markers
@@ -237,6 +256,22 @@ var Map = React.createClass({
         markers[i].setMap(null);
       }
     }
+
+    if (self.state.heatmap) {
+      var results = [];
+      self.state.heatmap.set('map', null);
+      self.state.heatmap = null;
+      for (var i = 0; i < self.props.favorites.length; i++) {
+        results.push(new google.maps.LatLng(self.props.favorites[i].lat, self.props.favorites[i].lng));
+      }
+      self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+        data: results,
+        map: self.state.map,
+        radius: 50
+      });
+      return results;
+    }
+
   },
 
   handleSubmit(e) {
@@ -248,7 +283,7 @@ var Map = React.createClass({
     }
     e.preventDefault();
     var timestamp = this.state.lastMarkerTimeStamp;
-    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location);
+    this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     this.setState({location: '', comment: ''});
   },
 
@@ -266,6 +301,16 @@ var Map = React.createClass({
         <input type="text" className="form-control" id="location" value={this.state.location} onChange={this.handleLocationChange} placeholder="Location" />
         <label htmlFor="comment">Comment:</label>
         <textarea className="form-control" rows="10" id="comment" value={this.state.comment} onChange={this.handleCommentChange}></textarea>
+        <label htmlFor="category">Category:</label>
+        <select id="category" value={this.state.category} onChange={this.handleCategoryChange}>
+          <option value="default">-- Choose a category --</option>
+          <option value="Assault">Assault</option>
+          <option value="Theft/Larceny">Theft/Larceny</option>
+          <option value="Burglary">Burglary</option>
+          <option value="Vandalism">Vandalism</option>
+          <option value="Drugs/Alcohol Violations">Drugs/Alcohol Violations</option>
+          <option value="Motor Vehicle Theft">Motor Vehicle Theft</option>
+        </select>
         <div>
           <input type="submit" className="btn btn-primary" value="Save Breadcrumb" />
         </div>
