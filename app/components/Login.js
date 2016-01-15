@@ -3,7 +3,7 @@ var helpers = require('../utils/helpers');
 
 var Login = React.createClass({
   getInitialState: function() {
-    localStorage.clear();
+    localStorage.removeItem('username');
     return {
       username: '',
       password: '',
