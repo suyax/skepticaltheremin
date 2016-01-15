@@ -16,7 +16,7 @@ var Logout = React.createClass({
               <h1>Thank you for visiting {this.state.username}</h1>
               <a href="#map"> click to log in again </a>
             </div>
-            )}
+  )}
 });
 
 module.exports = Logout;
