@@ -8,9 +8,11 @@ var Logout = React.createClass({
     };
   },
   componentDidMount: function() {
-    FB.logout(function(response) {
-       console.log(response);
-    });
+    var response = localStorage.getItem('response');
+    if (response) {
+      FB.logout(function(response) {
+      });
+    }
     localStorage.clear();
     console.log('didmount');
   },
@@ -19,7 +21,7 @@ var Logout = React.createClass({
               <h1>Thank you for visiting {this.state.username}</h1>
               <a href="#map"> click to log in again </a>
             </div>
-  )}
+    )}
 });
 
 module.exports = Logout;

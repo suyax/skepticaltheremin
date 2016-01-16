@@ -17,7 +17,7 @@ var Login = React.createClass({
         cookie     : true,  // enable cookies to allow the server to access
                           // the session
         xfbml      : true,  // parse social plugins on this page
-        version    : 'v2.5' // use version 2.1
+        version    : 'v2.5' // use version 2.5
       });
 
       // Now that we've initialized the JavaScript SDK, we call
@@ -41,19 +41,19 @@ var Login = React.createClass({
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) return;
       js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/en_US/sdk.js";
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   },
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
-  testAPI: function() {
+  FBAPI: function() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
-    console.log('Successful login for: ' + response.name);
-    document.getElementById('status').innerHTML =
-      'Thanks for logging in, ' + response.name + '!';
+    console.log('Successful login for: ' + response.userID);
+    // document.getElementById('status').innerHTML =
+    //   'Thanks for logging in, ' + response.name + '!';
     });
   },
 
@@ -67,7 +67,8 @@ var Login = React.createClass({
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
-      this.testAPI();
+      localStorage.setItem('response',response);
+      this.FBAPI();
     } else if (response.status === 'not_authorized') {
       // The person is logged into Facebook, but not your app.
       document.getElementById('status').innerHTML = 'Please log ' +
@@ -75,7 +76,7 @@ var Login = React.createClass({
     } else {
       // The person is not logged into Facebook, so we're not sure if
       // they are logged into this app or not.
-      document.getElementById('status').innerHTML = 'Please log ' +
+     // document.getElementById('status').innerHTML = 'Please log ' +
       'into Facebook.';
     }
   },
@@ -86,11 +87,13 @@ var Login = React.createClass({
   checkLoginState: function() {
       var self = this;
     FB.getLoginStatus(function(response) {
-      helpers.signupUser(response.authResponse.userID,'',function(data){
-      self.props.loginUser(data.username, data.password);
-      });
-      this.statusChangeCallback(response);
-    }.bind(this));
+      if (response.authResponse) {
+        helpers.signupUser(response.authResponse.userID,'',function(data){
+        self.props.loginUser(data.username, data.password);
+        });
+      }
+      self.statusChangeCallback(response);
+    });
   },
 
   handleClick: function() {
@@ -109,7 +112,7 @@ var Login = React.createClass({
     localStorage.setItem('username', this.state.username);
     console.log("Login called:", this.state.username, this.state.password);
     helpers.login(this.state.username,this.state.password);
-    this.props.loginUser(this.state.username);
+    this.props.loginUser(this.state.username, this.state.password);
   },
 
   render: function(){
@@ -132,7 +135,7 @@ var Login = React.createClass({
        <p>
          <a onClick={this.change}>Sign up for an account &rarr;</a>
        </p>
-         <a href="#" onClick={this.handleClick}>Login</a>
+         <img src={'http://i.stack.imgur.com/ZW4QC.png'} alt="facebook login" className="img-responsive" onClick={this.handleClick}/>
       </div>
 
     )
