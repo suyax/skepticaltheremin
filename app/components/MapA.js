@@ -3,7 +3,6 @@ var helpers = require('../utils/helpers');
 var markers = [];
 
 var Map = React.createClass({
-
   getInitialState(){
     return {
       location: '',
@@ -14,16 +13,17 @@ var Map = React.createClass({
       currentMarker: null,
       lastMarkerTimeStamp: null,
       map: null,
-      category: "default",
-      markers: [],
-      filterCategory: 'default'
+      category: 'default',
+      filterCategory: 'default',
+      heatmap: null,
+      markers: []
     }
   },
-  
+
   handleLocationChange(e) {
-    this.setState({location: e.target.value});  
+    this.setState({location: e.target.value});
   },
-  
+
   handleCommentChange(e) {
     this.setState({comment: e.target.value});
   },
@@ -36,9 +36,7 @@ var Map = React.createClass({
     var breadcrumbs = this.props.favorites;
     for(var i = breadcrumbs.length - 1; i >= 0; i--){
       var breadcrumb = breadcrumbs[i];
-      console.log('breadcrumb: ', breadcrumb)
       if(breadcrumb.id === id){
-        console.log('match breadcrumb state is set!')
         this.setState({location: breadcrumb.location, comment: breadcrumb.details.note, category: breadcrumb.category})
         return;
       }
@@ -72,7 +70,7 @@ var Map = React.createClass({
   componentDidMount(){
 
     // Only componentDidMount is called when the component is first added to
-    // the page. This is why we are calling the following method manually. 
+    // the page. This is why we are calling the following method manually.
     // This makes sure that our map initialization code is run the first time.
 
     // this.componentDidUpdate();
@@ -80,10 +78,11 @@ var Map = React.createClass({
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: {lat: this.props.lat, lng: this.props.lng},
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 
     this.setState({map: map});
+
 
     //Right Click Menu
     google.maps.event.addListener(map, "rightclick", function(e) {
@@ -91,10 +90,10 @@ var Map = React.createClass({
 
       var $contextMenu = $('<div class="contextmenu"></div>');
       $contextMenu.css({
-        'position': 'absolute', 
-        'left': e.pixel.x, 
+        'position': 'absolute',
+        'left': e.pixel.x,
         'top': e.pixel.y,
-        'background-color': 'white',
+        'background-color': 'yellow',
         'border': '1px solid #cccccc',
         'padding': '2px 5px'
       });
@@ -104,7 +103,6 @@ var Map = React.createClass({
       var $closemenu = $('<div class="closemenu">Close Menu</div>')
 
       $createbreadcrumb.on('click', function() {
-        console.log('bready crumbies');
         $('.contextmenu').remove();
 
         var addressMarker = '';
@@ -135,26 +133,24 @@ var Map = React.createClass({
             scale: 5
           }
         });
-        // self.setState({markers: self.state.markers.concat(marker)});
         markers.push(marker);
+        console.log('createbreadcrumb, markers ', markers)
         google.maps.event.addListener(marker, 'click', function(event) {
 
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
-             var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
+            var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
             self.props.searchAddress(testString, function(newLocation){
-            
+
           });
           self.setState({location: addressMarker, comment: noteMarker});
           self.matchBreadCrumb(this.id);
-          console.log('this is what the current marker on state is set to: ', self.state.currentMarker)
         });
         self.setState({currentMarker: marker});
         self.updateCurrentLocation();
       });
 
       $centerhere.on('click', function() {
-        console.log('ayeeeeee');
         $('.contextmenu').remove();
       });
 
@@ -168,7 +164,7 @@ var Map = React.createClass({
 
       $('#map').append($contextMenu);
     })
-    
+
     helpers.getAllBreadCrumbs(this.props.user, function(data){
       if(!data){
         return;
@@ -187,22 +183,16 @@ var Map = React.createClass({
             scale: 5
           }
         });
-        // self.setState({markers: self.state.markers.concat(marker)});
-        console.log(markers)
-        console.log(marker)
         markers.push(marker);
-        console.log(markers);
         google.maps.event.addListener(marker, 'click', function(event) {
-          console.log(event.latLng.lat(), 'LATLONG', event.latLng.lng())
 
-           var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
+          var testString = event.latLng.lat().toString() + " " +  event.latLng.lng().toString();
           self.props.searchAddress(testString, function(newLocation){
-          
-        });
+
+          });
           self.setState({currentMarker: this});
           self.updateCurrentLocation();
           self.matchBreadCrumb(this.id);
-          console.log('Existing Marker has been clicked, current marker set to: ', self.state.currentMarker)
 
         });
 
@@ -211,31 +201,9 @@ var Map = React.createClass({
 
   },
 
-  // componentDidUpdate(){
-  //   if(this.props.favorites.length !== this.state.breadcrumbs.length){
-  //     this.setState({breadcrumbs: this.props.favorites});
-  //     return;
-  //   }
-  //   if(this.lastLat == this.props.center.lat && this.lastLng == this.props.center.lng){
-
-  //     // The map has already been initialized at this address.
-  //     // Return from this method so that we don't reinitialize it
-  //     // (and cause it to flicker).
-
-  //     return;
-  //   }
-
-  //   this.state.map.setCenter(this.props.center.lat, this.props.center.lng);
-  //   this.lastLat = this.props.center.lat;
-  //   this.lastLng = this.props.center.lng
-  // },
-
-  componentDidUpdate() {
+  componentDidUpdate(){
     // filtering map markers
     var self = this;
-    console.log('component received props!');
-    // console.log('markers:' ,this.state.markers);
-    // console.log('markers:' ,markers);
     for (var i = 0; i < markers.length; i++) {
       markers[i].setMap(this.state.map);
     }
@@ -244,26 +212,58 @@ var Map = React.createClass({
       var temp = this.props.favorites.filter(function(favorite) {
         return favorite.id === markers[i].id;
       })
-      console.log('temp: ', temp);
       if (temp.length === 0) {
         markers[i].setMap(null);
       }
     }
 
+    if (self.state.heatmap) {
+      var results = [];
+      self.state.heatmap.set('map', null);
+      self.state.heatmap = null;
+      for (var i = 0; i < self.props.favorites.length; i++) {
+        results.push(new google.maps.LatLng(self.props.favorites[i].lat, self.props.favorites[i].lng));
+      }
+      self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+        data: results,
+        map: self.state.map,
+        radius: 50
+      });
+      return results;
+    }
+
+  },
+
+  toggleHeat() {
+    var results = [];
+    var self = this;
+    if (self.state.heatmap) {
+      self.state.heatmap.set('map', null);
+      self.state.heatmap = null;
+    }
+    else {
+      for (var i = 0; i < self.props.favorites.length; i++) {
+        results.push(new google.maps.LatLng(self.props.favorites[i].lat, self.props.favorites[i].lng));
+      }
+      self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+        data: results,
+        map: self.state.map,
+        radius: 50
+      });
+
+      return results;
+    }
   },
 
   handleSubmit(e) {
     var id = this.props.favorites.length;
     for(var i = 0;i<this.props.favorites.length; i++){
-    if(this.props.favorites[i].id === this.state.currentMarker.id){
-       id = this.state.currentMarker.id;
+      if(this.props.favorites[i].id === this.state.currentMarker.id){
+        id = this.state.currentMarker.id;
+      }
     }
-
-   }
     e.preventDefault();
-    //var id = this.props.favorites.length;
     var timestamp = this.state.lastMarkerTimeStamp;
-    console.log('BEFORE SUBMITTING, ID IS: ', this.state.currentMarker)
     this.addFavBreadCrumb(id, this.props.lat, this.props.lng, timestamp, {note: this.state.comment}, this.state.location, this.state.category);
     this.setState({location: '', comment: ''});
   },
@@ -272,6 +272,9 @@ var Map = React.createClass({
 
     return (
       <div>
+      <div>
+        <input type="button" className="toggleHeatButton" value="Toggle Heat" onClick={this.toggleHeat}></input>
+      </div>
       <div className="map-holder">
         <p>Loading......</p>
         <div id="map">
@@ -301,5 +304,4 @@ var Map = React.createClass({
   }
 
 });
-
 module.exports = Map;

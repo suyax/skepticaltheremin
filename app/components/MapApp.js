@@ -65,6 +65,7 @@ var MapApp = React.createClass({
         favorites[i] = breadcrumb;
         console.log('EDTTED BREADCRUMB',favorites[i])
         helpers.addBreadCrumb(this.state.user, breadcrumb, function(data){
+          console.log('breadcrumb: ',breadcrumb)
           console.log(data);
         });
         flag = true;
