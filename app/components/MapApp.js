@@ -7,7 +7,7 @@ var LocationList = require('./LocationList');
 var SearchUser = require('./SearchUser');
 var helpers = require('../utils/helpers');
 var Signup = require('./Signup');
-
+var Login = require('./Login');
 
 var MapApp = React.createClass({
 
@@ -18,8 +18,9 @@ var MapApp = React.createClass({
     var favorites = [];
 
     return {
-      user: '',
-      loggedin: false,
+      user: localStorage.getItem('username')||'',
+      loggedin: localStorage.getItem('username') || false,
+      signedupflag: false,
       favorites: favorites,
       currentAddress: 'Hack Reactor',
       mapCoordinates: {
@@ -34,15 +35,23 @@ var MapApp = React.createClass({
     };
   },
 
-  loginUser(username){
-    console.log("logged in:", username);
-    this.setState({user: username, loggedin: true}); 
-    helpers.getAllBreadCrumbs(username, function(data){
-      if(data){
-        this.setState({favorites: data.pins});
+  loginUser(username, password){
+    var self = this;
+    console.log("login user works @@@@@@@@@@@@@@")
+    helpers.checkUser(username, password, function(user) {
+      console.log(user);
+      if (user) {
+        console.log("logged in:", username);
+        self.setState({user: username, loggedin: true});
+        localStorage.setItem('username', self.state.user);
+        helpers.getAllBreadCrumbs(username, function(data){
+          if(data){
+            self.setState({favorites: data.pins});
+            self.setState({signedupflag: false});
+          }
+        }.bind(this));
       }
-    }.bind(this));
-
+    })
   },
 
   componentDidMount(){
@@ -71,7 +80,7 @@ var MapApp = React.createClass({
         });
         flag = true;
       }
-      
+
     }
 
     if(!flag){
@@ -86,9 +95,14 @@ var MapApp = React.createClass({
       favorites: favorites
     });
 
-   
+
     localStorage.favorites = JSON.stringify(favorites);
 
+  },
+
+  changeSignedUpFlag(flag){
+    console.log('changeSignedUpFlag!!!!!!!!')
+    this.setState({signedupflag:flag})
   },
 
   searchForAddress(address, cb, recenter){
@@ -124,7 +138,7 @@ var MapApp = React.createClass({
         }
 
         if(cb){
-          cb(results[0].formatted_address); 
+          cb(results[0].formatted_address);
         }
 
       }
@@ -149,7 +163,7 @@ var MapApp = React.createClass({
   },
 
   render(){
-    if(this.state.loggedin){
+    if(this.state.loggedin && !this.state.signedupflag){
       return (
 
         <div>
@@ -162,21 +176,25 @@ var MapApp = React.createClass({
             onFavoriteToggle={this.toggleFavorite}
             onAddToFavBcs={this.addToFavBreadCrumbs}
             searchAddress={this.searchForAddress}
-            address={this.state.currentAddress} 
-            center={this.state.center} 
+            address={this.state.currentAddress}
+            center={this.state.center}
             loginUser={this.loginUser}
             user={this.state.user} 
             filterCategory={this.state.filterCategory} />
 
           <LocationList locations={this.state.favorites}
-            activeLocationAddress={this.state.currentAddress} 
+            activeLocationAddress={this.state.currentAddress}
             onClick={this.searchForAddress} />
 
         </div>
 
       );
+    } else if (!this.state.loggedin && !this.state.signedupflag) {
+      console.log("go in to else if")
+      return <Login loginUser={this.loginUser} changeFunction={this.changeSignedUpFlag}/>
     } else {
-      return <Signup loginUser={this.loginUser}/>
+      console.log("go in to else")
+      return <Signup loginUser={this.loginUser} changeFunction={this.changeSignedUpFlag}/>
     }
   }
 

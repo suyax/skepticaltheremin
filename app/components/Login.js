@@ -17,9 +17,12 @@ var Login = React.createClass({
   login: function(e){
     e.preventDefault();
     var self = this;
-    console.log("Login called:", this.state.username, this.state.password);
-    helpers.login(this.state.username,this.state.password);
-    this.props.loginUser(this.state.username);
+    this.props.loginUser(this.state.username, this.state.password);
+  },
+  change: function(e){
+    console.log("changed!!!!!!!!!!")
+    e.preventDefault();
+    this.props.changeFunction(true);
   },
 
   render: function(){
@@ -36,11 +39,11 @@ var Login = React.createClass({
              <input onChange={this.handlePasswordChange} value={this.state.password} id="password" type="password" name="password" />
            </div>
            <div>
-             <input className="btn btn-primary" type="submit" value="Sign up" />
+             <input className="btn btn-primary" type="submit" value="Log In" />
            </div>
        </form>
        <p>
-         <a href="#login">Login to your account &rarr;</a>
+         <a onClick={this.change}>Sign up for an account &rarr;</a>
        </p>
       </div>
 
