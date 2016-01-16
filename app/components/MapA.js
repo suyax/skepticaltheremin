@@ -237,27 +237,22 @@ var Map = React.createClass({
   toggleHeat() {
     var results = [];
     var self = this;
-    console.log('getpoints')
-    helpers.getAllBreadCrumbs(self.props.user, function (data) {
-      if (self.state.heatmap) {
-        self.state.heatmap.set('map', null);
-        self.state.heatmap = null;
+    if (self.state.heatmap) {
+      self.state.heatmap.set('map', null);
+      self.state.heatmap = null;
+    }
+    else {
+      for (var i = 0; i < self.props.favorites.length; i++) {
+        results.push(new google.maps.LatLng(self.props.favorites[i].lat, self.props.favorites[i].lng));
       }
-      else {
-        for (var i = 0; i < data.pins.length; i++) {
-          results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng));
-        }
-        console.log('data', data)
+      self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+        data: results,
+        map: self.state.map,
+        radius: 50
+      });
 
-        self.state.heatmap = new google.maps.visualization.HeatmapLayer({
-          data: results,
-          map: self.state.map,
-          radius: 50
-        });
-
-        return results;
-      }
-    })
+      return results;
+    }
   },
 
   handleSubmit(e) {
