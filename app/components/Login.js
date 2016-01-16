@@ -49,11 +49,16 @@ var Login = React.createClass({
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
   FBAPI: function() {
+    var self = this;
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
-    console.log('Successful login for: ' + response.userID);
-    // document.getElementById('status').innerHTML =
-    //   'Thanks for logging in, ' + response.name + '!';
+      console.log('Successful login username: ', response.name);
+      console.log('Successful login usernid: ', response.id);
+      if (response.name && response.id) {
+        helpers.signupUser(response.name, response.id, function(data){
+        self.props.loginUser(response.name, response.id);
+        });
+      }
     });
   },
 
@@ -87,11 +92,6 @@ var Login = React.createClass({
   checkLoginState: function() {
       var self = this;
     FB.getLoginStatus(function(response) {
-      if (response.authResponse) {
-        helpers.signupUser(response.authResponse.userID,'',function(data){
-        self.props.loginUser(data.username, data.password);
-        });
-      }
       self.statusChangeCallback(response);
     });
   },
