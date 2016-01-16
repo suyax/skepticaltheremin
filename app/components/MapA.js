@@ -237,21 +237,60 @@ var Map = React.createClass({
   toggleHeat() {
     var results = [];
     var self = this;
-    if (self.state.heatmap) {
-      self.state.heatmap.set('map', null);
-      self.state.heatmap = null;
-    }
-    else {
-      for (var i = 0; i < self.props.favorites.length; i++) {
-        results.push(new google.maps.LatLng(self.props.favorites[i].lat, self.props.favorites[i].lng));
+    console.log('getpoints')
+    self.setState({'filterCategory': self.props.filterCategory});
+    helpers.getAllBreadCrumbsForAll(function (data) {
+      if (self.state.heatmap) {
+        self.state.heatmap.set('map', null);
+        self.state.heatmap = null;
       }
-      self.state.heatmap = new google.maps.visualization.HeatmapLayer({
-        data: results,
-        map: self.state.map,
-        radius: 50
-      });
+      else {
+        for (var i = 0; i < data.pins.length; i++) {
+          if (self.state.filterCategory === 'default') {
+            results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng));
+          }
+          else {
+            if (self.state.filterCategory === data.pins[i].category) {
+              results.push(new google.maps.LatLng(data.pins[i].lat, data.pins[i].lng));
+            }
+          }
+        }
+        self.state.heatmap = new google.maps.visualization.HeatmapLayer({
+          data: results,
+          map: self.state.map,
+          radius: 50
+        });
 
-      return results;
+        return results;
+      }
+    })
+  },
+
+  changeColor() {
+    var self = this;
+    var gradient = [
+      'rgba(0, 255, 255, 0)',
+      'rgba(0, 255, 255, 1)',
+      'rgba(0, 191, 255, 1)',
+      'rgba(0, 127, 255, 1)',
+      'rgba(0, 63, 255, 1)',
+      'rgba(0, 0, 255, 1)',
+      'rgba(0, 0, 223, 1)',
+      'rgba(0, 0, 191, 1)',
+      'rgba(0, 0, 159, 1)',
+      'rgba(0, 0, 127, 1)',
+      'rgba(63, 0, 91, 1)',
+      'rgba(127, 0, 63, 1)',
+      'rgba(191, 0, 31, 1)',
+      'rgba(255, 0, 0, 1)'
+    ];
+    if (self.state.heatmap) {
+      if (self.state.heatmap.get('gradient')) {
+        self.state.heatmap.set('gradient', null)
+      }
+      else {
+        self.state.heatmap.set('gradient', gradient)
+      }
     }
   },
 
@@ -274,6 +313,7 @@ var Map = React.createClass({
       <div>
       <div>
         <input type="button" className="toggleHeatButton" value="Toggle Heat" onClick={this.toggleHeat}></input>
+        <input type="button" className="colorChangeButton" value="Change Color" onClick={this.changeColor}></input>
       </div>
       <div className="map-holder">
         <p>Loading......</p>

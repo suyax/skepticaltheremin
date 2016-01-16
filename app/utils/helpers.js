@@ -1,3 +1,16 @@
+var getAllBreadCrumbsForAll = function(cb) {
+  $.ajax({
+    url: '/api/maps',
+    type: 'GET',
+    success: function(data) {
+      // this.setState({data: data});
+      return cb(data);
+    },
+    error: function(xhr, status, err) {
+      console.log(status, err.toString());
+    }
+  });
+};
 
 var getAllBreadCrumbs = function(username, cb) {
   console.log(username);
@@ -6,7 +19,6 @@ var getAllBreadCrumbs = function(username, cb) {
     type: 'GET',
     success: function(data) {
       // this.setState({data: data});
-      console.log(data);
       return cb(data);
     },
     error: function(xhr, status, err) {
@@ -86,6 +98,7 @@ var login = function(username, password, cb){
 };
 
 var helpers = {
+  getAllBreadCrumbsForAll: getAllBreadCrumbsForAll,
   getAllBreadCrumbs: getAllBreadCrumbs,
   addBreadCrumb: addBreadCrumb,
   signupUser: signupUser,
