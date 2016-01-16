@@ -8,7 +8,10 @@ var Logout = React.createClass({
     };
   },
   componentDidMount: function() {
-    localStorage.removeItem('username');
+    FB.logout(function(response) {
+       console.log(response);
+    });
+    localStorage.clear();
     console.log('didmount');
   },
   render: function(){
