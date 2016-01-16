@@ -65,11 +65,11 @@ router.route('/users')
 
 router.route('/maps')
   .get(function (req, res) {
-    userController.getAllPins(function (err, res) {
+    userController.getAllPins(function (err, results) {
       if (err) {
         return res.json({err: err});
       }
-      res.json(pins);
+      res.json(results);
     })
   })
 

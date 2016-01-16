@@ -29,7 +29,8 @@ var MapApp = React.createClass({
       center: {
         lat: 37.7836966,
         lng: -122.4089664
-      }
+      },
+      filterCategory: 'default'
     };
   },
 
@@ -142,7 +143,7 @@ var MapApp = React.createClass({
           })
         }
         console.log('FAVES: ', faves);
-        this.setState({favorites: faves});
+        this.setState({favorites: faves, filterCategory: e.target.value});
       }
     }.bind(this));
   },
@@ -164,7 +165,8 @@ var MapApp = React.createClass({
             address={this.state.currentAddress} 
             center={this.state.center} 
             loginUser={this.loginUser}
-            user={this.state.user} />
+            user={this.state.user} 
+            filterCategory={this.state.filterCategory} />
 
           <LocationList locations={this.state.favorites}
             activeLocationAddress={this.state.currentAddress} 
